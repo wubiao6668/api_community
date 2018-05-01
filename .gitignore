@@ -15,7 +15,7 @@
 .classpath
 # IDEA ignore
 .idea
-.idea/*
+*/.idea/*
 .class
 *.class
 *.log
