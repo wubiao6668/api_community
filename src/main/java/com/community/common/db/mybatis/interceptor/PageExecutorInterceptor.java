@@ -85,7 +85,7 @@ public class PageExecutorInterceptor extends PageInterceptor {
         List<Page> result = Lists.newArrayList();
         Page pageInfo = new Page();
         pageInfo.setHasMore(hasMore);
-        pageInfo.setPagination(Optional.of(pagination));
+        pageInfo.setPagination(Optional.ofNullable(pagination));
         pageInfo.setData(Optional.ofNullable(dataList));
         result.add(pageInfo);
         return result;

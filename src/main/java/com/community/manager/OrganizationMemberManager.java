@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
@@ -32,8 +33,8 @@ public class OrganizationMemberManager {
             return organizationMemberDO;
         }
         Page<OrganizationMemberDO> memberDOPage = organizationMemberMapper.listPage(request);
-        List<OrganizationMemberDO> organizationMemberDOList = null;
-        if (null != memberDOPage && CollectionUtils.isNotEmpty(organizationMemberDOList = memberDOPage.getData()) && organizationMemberDOList.size() == 1) {
+        List<OrganizationMemberDO> organizationMemberDOList = Optional.of(memberDOPage).flatMap(Page::getData).orElse(null);
+        if (CollectionUtils.isNotEmpty(organizationMemberDOList) && organizationMemberDOList.size() == 1) {
             organizationMemberDO = organizationMemberDOList.get(0);
         }
         return organizationMemberDO;
