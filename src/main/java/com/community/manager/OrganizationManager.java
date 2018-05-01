@@ -17,7 +17,6 @@ import com.community.domain.model.db.*;
 import com.community.domain.request.*;
 import com.community.domain.response.*;
 import com.community.domain.session.LoginContext;
-import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -83,13 +82,13 @@ public class OrganizationManager {
         }
         //置顶帖子
         Page<ContentDO> contentDOPage = FutureUtils.get(contentPageFuture);
-        List<ContentDO> contentDOList = Optional.ofNullable(contentDOPage).flatMap(Page::getDataOptional).orElse(null);
+        List<ContentDO> contentDOList = Optional.ofNullable(contentDOPage).flatMap(Page::getData).orElse(null);
         //活动
         Page<ActivityDO> activityDOPage = FutureUtils.get(activityPageFuture);
-        List<ActivityDO> activityDOList = Optional.ofNullable(activityDOPage).flatMap(Page::getDataOptional).orElse(null);
+        List<ActivityDO> activityDOList = Optional.ofNullable(activityDOPage).flatMap(Page::getData).orElse(null);
         //标签
         Page<TagDO> tagDOPage = FutureUtils.get(tagPageFuture);
-        List<TagDO> tagDOList = Optional.ofNullable(tagDOPage).flatMap(Page::getDataOptional).orElse(null);
+        List<TagDO> tagDOList = Optional.ofNullable(tagDOPage).flatMap(Page::getData).orElse(null);
 
         //返回对象
         OrganizationResponse organizationResponse = BeanUtils.copyProperties(organizationDO, OrganizationResponse.class);
@@ -109,9 +108,9 @@ public class OrganizationManager {
 
     public static void main(String[] args) {
         Page<ContentDO> contentDOPage = new Page<>();
-        contentDOPage.setData(Lists.newArrayList(new ContentDO()));
+//        contentDOPage.setData(Lists.newArrayList(new ContentDO()));
 
-        List<ContentDO> contentDOList = Optional.ofNullable(contentDOPage).flatMap(Page::getDataOptional).orElse(null);
+        List<ContentDO> contentDOList = Optional.ofNullable(contentDOPage).flatMap(Page::getData).orElse(null);
         System.out.println(contentDOList);
     }
 }

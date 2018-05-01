@@ -9,6 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+import java.util.Optional;
+
 public abstract class AbstractCurdService<KEY, Q extends PageAble, M, T, Mapper> {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
@@ -32,7 +35,8 @@ public abstract class AbstractCurdService<KEY, Q extends PageAble, M, T, Mapper>
             if (null != page) {
                 returnPage.setHasMore(page.getHasMore());
                 returnPage.setPagination(page.getPagination());
-                returnPage.setData(BeanUtils.list2list(page.getData(), tClazz));
+                List<M> dataList = Optional.ofNullable(page).flatMap(Page::getData).orElse(null);
+                returnPage.setData(Optional.ofNullable(BeanUtils.list2list(dataList, tClazz)));
             }
             return Response.success(returnPage);
         } catch (Exception e) {

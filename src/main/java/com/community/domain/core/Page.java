@@ -13,31 +13,31 @@ public class Page<M> implements Serializable {
 
     private Boolean hasMore;
     // 分页
-    private Pagination pagination;
+    private Optional<Pagination> pagination;
     // 结果列表
-    private List<M> data;
+    private Optional<List<M>> data;
 
     public Page() {
     }
 
-    public Page(Pagination pagination, List<M> data) {
+    public Page(Optional<Pagination> pagination, Optional<List<M>> data) {
         this.pagination = pagination;
         this.data = data;
     }
 
-    public Pagination getPagination() {
-        return this.pagination;
+    public Optional<Pagination> getPagination() {
+        return pagination;
     }
 
-    public void setPagination(Pagination pagination) {
+    public void setPagination(Optional<Pagination> pagination) {
         this.pagination = pagination;
     }
 
-    public List<M> getData() {
-        return this.data;
+    public Optional<List<M>> getData() {
+        return data;
     }
 
-    public void setData(List<M> data) {
+    public void setData(Optional<List<M>> data) {
         this.data = data;
     }
 
@@ -49,9 +49,9 @@ public class Page<M> implements Serializable {
         this.hasMore = hasMore;
     }
 
-    public Optional<List<M>> getDataOptional() {
-        return Optional.ofNullable(data);
-    }
+//    public Optional<List<M>> getDataOptional() {
+//        return Optional.ofNullable(data);
+//    }
 
     //    /**
 //     * 是否还有下一页数据

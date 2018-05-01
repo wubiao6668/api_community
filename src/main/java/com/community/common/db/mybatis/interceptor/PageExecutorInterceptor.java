@@ -17,6 +17,7 @@ import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 
 import java.util.List;
+import java.util.Optional;
 
 @Intercepts({@Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class})})
 public class PageExecutorInterceptor extends PageInterceptor {
@@ -84,8 +85,8 @@ public class PageExecutorInterceptor extends PageInterceptor {
         List<Page> result = Lists.newArrayList();
         Page pageInfo = new Page();
         pageInfo.setHasMore(hasMore);
-        pageInfo.setPagination(pagination);
-        pageInfo.setData(dataList);
+        pageInfo.setPagination(Optional.of(pagination));
+        pageInfo.setData(Optional.ofNullable(dataList));
         result.add(pageInfo);
         return result;
     }
