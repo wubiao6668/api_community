@@ -4,12 +4,13 @@
 
 package com.community.web.controller.api;
 
+import com.community.manager.MessageSystemDetailManager;
 import com.community.service.MessageSystemDetailService;
 import com.community.web.core.AbstractAction;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class MessageSystemDetailApiController extends AbstractAction<MessageSystemDetailService> {
+public class MessageSystemDetailApiController extends AbstractAction<MessageSystemDetailService, MessageSystemDetailManager> {
 
 
 }

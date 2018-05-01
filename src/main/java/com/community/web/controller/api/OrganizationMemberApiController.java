@@ -4,12 +4,13 @@
 
 package com.community.web.controller.api;
 
+import com.community.manager.OrganizationMemberManager;
 import com.community.service.OrganizationMemberService;
 import com.community.web.core.AbstractAction;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class OrganizationMemberApiController extends AbstractAction<OrganizationMemberService> {
+public class OrganizationMemberApiController extends AbstractAction<OrganizationMemberService, OrganizationMemberManager> {
 
 
 }

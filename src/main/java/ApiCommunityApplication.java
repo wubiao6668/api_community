@@ -7,6 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
         "com.community.config",
         "com.community.dao.mapper",
         "com.community.service",
+        "com.community.manager",
         "com.community.web"
 })
 @MapperScan(basePackages = "com.community.dao.mapper")
