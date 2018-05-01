@@ -4,13 +4,12 @@
 
 package com.community.web.controller.api;
 
-import com.community.manager.FavoriteManager;
 import com.community.service.FavoriteService;
 import com.community.web.core.AbstractAction;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class FavoriteApiController extends AbstractAction<FavoriteService, FavoriteManager> {
+public class FavoriteApiController extends AbstractAction<FavoriteService> {
 
 
 }
