@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: api_community
+server:
+  port: 8061
+db:
+   username: root
+   password: 12345678
+   jdbcUrl: jdbc:mysql://127.0.0.1:3306/community?useSSL=false&useUnicode=true&characterEncoding=UTF-8
+   driverClass: com.mysql.jdbc.Driver
+mybatis:
+    type-aliases-package: com.community.domain.model.db
+    config-location: classpath:db/mybatis-config.xml
+    mapperLocations: classpath:db/mysql/mapper/*.xml
+#    configuration:
+#        map-underscore-to-camel-case: true
+#        default-fetch-size: 100
+#        default-statement-timeout: 30

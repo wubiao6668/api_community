@@ -1,0 +1,16 @@
+/**
+ * Created by wubiao on - 2018/04/29.
+ */
+
+package com.community.dao.mapper;
+
+
+import com.community.common.core.CurdAble;
+import com.community.domain.model.db.TagDO;
+import com.community.domain.request.TagRequest;
+import org.apache.ibatis.annotations.Mapper;
+
+@Mapper
+public interface TagMapper extends CurdAble<Long, TagRequest, TagDO> {
+
+}

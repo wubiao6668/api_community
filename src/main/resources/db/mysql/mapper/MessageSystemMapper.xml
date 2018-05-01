@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.community.dao.mapper.MessageSystemMapper">
+
+    <sql id="columns">
+        id,user_id,msg_num,type,is_show,is_read,title,content,send_msg_time,is_delete,create_user_id,create_time,update_user_id,update_time,sys_version
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO message_system (
+        user_id,
+        msg_num,
+        type,
+        is_show,
+        is_read,
+        title,
+        content,
+        send_msg_time,
+        is_delete,
+        create_user_id,
+        create_time,
+        update_user_id,
+        update_time,
+        sys_version
+        ) VALUES (
+        #{userId},
+        #{msgNum},
+        #{type},
+        #{isShow},
+        #{isRead},
+        #{title},
+        #{content},
+        #{sendMsgTime},
+        0,
+        #{createUserId},
+        now(),
+        #{updateUserId},
+        now(),
+        1
+        )
+    </insert>
+
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO message_system (
+        <if test="@Ognl@isNotEmpty(userId)">
+            user_id,
+        </if>
+        <if test="@Ognl@isNotEmpty(msgNum)">
+            msg_num,
+        </if>
+        <if test="@Ognl@isNotEmpty(type)">
+            type,
+        </if>
+        <if test="@Ognl@isNotEmpty(isShow)">
+            is_show,
+        </if>
+        <if test="@Ognl@isNotEmpty(isRead)">
+            is_read,
+        </if>
+        <if test="@Ognl@isNotEmpty(title)">
+            title,
+        </if>
+        <if test="@Ognl@isNotEmpty(content)">
+            content,
+        </if>
+        <if test="@Ognl@isNotEmpty(sendMsgTime)">
+            send_msg_time,
+        </if>
+        is_delete,
+        <if test="@Ognl@isNotEmpty(createUserId)">
+            create_user_id,
+        </if>
+        create_time,
+        <if test="@Ognl@isNotEmpty(updateUserId)">
+            update_user_id,
+        </if>
+        <if test="@Ognl@isNotEmpty(updateTime)">
+            update_time,
+        </if>
+        sys_version
+        ) VALUES (
+        <if test="@Ognl@isNotEmpty(userId)">
+            #{userId},
+        </if>
+        <if test="@Ognl@isNotEmpty(msgNum)">
+            #{msgNum},
+        </if>
+        <if test="@Ognl@isNotEmpty(type)">
+            #{type},
+        </if>
+        <if test="@Ognl@isNotEmpty(isShow)">
+            #{isShow},
+        </if>
+        <if test="@Ognl@isNotEmpty(isRead)">
+            #{isRead},
+        </if>
+        <if test="@Ognl@isNotEmpty(title)">
+            #{title},
+        </if>
+        <if test="@Ognl@isNotEmpty(content)">
+            #{content},
+        </if>
+        <if test="@Ognl@isNotEmpty(sendMsgTime)">
+            #{sendMsgTime},
+        </if>
+        0,
+        <if test="@Ognl@isNotEmpty(createUserId)">
+            #{createUserId},
+        </if>
+        now(),
+        <if test="@Ognl@isNotEmpty(updateUserId)">
+            #{updateUserId},
+        </if>
+        <if test="@Ognl@isNotEmpty(updateTime)">
+            #{updateTime},
+        </if>
+        1
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE message_system SET
+        user_id = #{userId},
+        msg_num = #{msgNum},
+        type = #{type},
+        is_show = #{isShow},
+        is_read = #{isRead},
+        title = #{title},
+        content = #{content},
+        send_msg_time = #{sendMsgTime},
+        is_delete = #{isDelete},
+        create_user_id = #{createUserId},
+        create_time = #{createTime},
+        update_user_id = #{updateUserId},
+        update_time = now(),
+        sys_version = sys_version + 1
+        WHERE
+        id = #{id}
+    </update>
+
+
+    <update id="updateSelective">
+        UPDATE message_system SET
+        <if test="null != userId">
+            user_id = #{userId},
+        </if>
+        <if test="null != msgNum">
+            msg_num = #{msgNum},
+        </if>
+        <if test="null != type">
+            type = #{type},
+        </if>
+        <if test="null != isShow">
+            is_show = #{isShow},
+        </if>
+        <if test="null != isRead">
+            is_read = #{isRead},
+        </if>
+        <if test="null != title">
+            title = #{title},
+        </if>
+        <if test="null != content">
+            content = #{content},
+        </if>
+        <if test="null != sendMsgTime">
+            send_msg_time = #{sendMsgTime},
+        </if>
+        <if test="null != isDelete">
+            is_delete = #{isDelete},
+        </if>
+        <if test="null != createUserId">
+            create_user_id = #{createUserId},
+        </if>
+        <if test="null != createTime">
+            create_time = #{createTime},
+        </if>
+        <if test="null != updateUserId">
+            update_user_id = #{updateUserId},
+        </if>
+        update_time = now(),
+        sys_version = sys_version + 1
+        WHERE
+        id = #{id}
+    </update>
+
+    <update id="updateByOptimisticLock">
+        UPDATE message_system
+        SET
+        <if test="null != userId">
+            user_id = #{userId},
+        </if>
+        <if test="null != msgNum">
+            msg_num = #{msgNum},
+        </if>
+        <if test="null != type">
+            type = #{type},
+        </if>
+        <if test="null != isShow">
+            is_show = #{isShow},
+        </if>
+        <if test="null != isRead">
+            is_read = #{isRead},
+        </if>
+        <if test="null != title">
+            title = #{title},
+        </if>
+        <if test="null != content">
+            content = #{content},
+        </if>
+        <if test="null != sendMsgTime">
+            send_msg_time = #{sendMsgTime},
+        </if>
+        <if test="null != isDelete">
+            is_delete = #{isDelete},
+        </if>
+        <if test="null != createUserId">
+            create_user_id = #{createUserId},
+        </if>
+        <if test="null != createTime">
+            create_time = #{createTime},
+        </if>
+        <if test="null != updateUserId">
+            update_user_id = #{updateUserId},
+        </if>
+        update_time = now(),
+        sys_version = sys_version + 1
+        WHERE
+        sys_version = #{sysVersion, jdbcType=INTEGER}
+        AND id = #{id}
+    </update>
+
+    <delete id="delete">
+        UPDATE message_system
+        SET is_delete = 1
+        <if test="@Ognl@isNotEmpty(updateAccount)">
+            update_account = #{updateAccount} ,
+        </if>
+        <if test="@Ognl@isNotEmpty(updateName)">
+            update_name = #{updateName} ,
+        </if>
+        update_time = now(),
+        sys_version = sys_version + 1
+        WHERE
+        id IN
+        <foreach collection="keys" item="keyTemp" open="(" separator="," close=")">
+            #{keyTemp}
+        </foreach>
+    </delete>
+
+    <delete id="deletePhysical">
+        DELETE
+        FROM message_system
+        WHERE
+        id = #{id}
+    </delete>
+
+    <select id="getByKey" resultType="MessageSystemDO">
+        SELECT
+        <include refid="columns"/>
+        FROM message_system
+        WHERE
+        id = #{id}
+    </select>
+
+    <select id="getByKeys" resultType="MessageSystemDO">
+        SELECT
+        <include refid="columns"/>
+        FROM message_system
+        WHERE
+        id IN
+        <foreach collection="keys" item="keyTemp" open="(" separator="," close=")">
+            #{keyTemp}
+        </foreach>
+    </select>
+
+    <select id="listPage" resultType="MessageSystemDO">
+        SELECT
+        <include refid="columns"/>
+        FROM message_system
+        <include refid="listPage_where"/>
+        <trim prefix="order by" prefixOverrides=",">
+            <if test="@Ognl@isNotEmpty(sortList)">
+                <foreach collection="sortList" item="sortTemp" separator=",">
+                    ${sortTemp.fieldName} ${sortTemp.sortOrder}
+                </foreach>
+            </if>
+        </trim>
+        <if test="pagination != null">
+            limit #{pagination.startRow}, #{pagination.pageSize}
+        </if>
+    </select>
+
+    <select id="listPageLimitCount" resultType="int">
+        SELECT COUNT(1)
+        FROM
+        ( SELECT count(1)
+        FROM message_system
+        <include refid="listPage_where"/>
+        <if test="pagination != null">
+            limit #{pagination.startRow}, #{pagination.limitPageSize}
+        </if>
+        ) AS tagTemp
+    </select>
+
+
+    <select id="listPageCount" resultType="int">
+        SELECT count(1)
+        FROM message_system
+        <include refid="listPage_where"/>
+    </select>
+
+    <sql id="listPage_where">
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="userId != null">
+                AND user_id = #{userId}
+            </if>
+            <if test="msgNum != null">
+                AND msg_num = #{msgNum}
+            </if>
+            <if test="type != null">
+                AND type = #{type}
+            </if>
+            <if test="isShow != null">
+                AND is_show = #{isShow}
+            </if>
+            <if test="isRead != null">
+                AND is_read = #{isRead}
+            </if>
+            <if test="title != null">
+                AND title = #{title}
+            </if>
+            <if test="content != null">
+                AND content = #{content}
+            </if>
+
+            <if test="isDelete != null">
+                AND is_delete = #{isDelete}
+            </if>
+            <if test="createUserId != null">
+                AND create_user_id = #{createUserId}
+            </if>
+
+            <if test="updateUserId != null">
+                AND update_user_id = #{updateUserId}
+            </if>
+
+            <if test="sysVersion != null">
+                AND sys_version = #{sysVersion}
+            </if>
+        </where>
+    </sql>
+
+</mapper>

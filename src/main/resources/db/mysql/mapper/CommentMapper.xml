@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.community.dao.mapper.CommentMapper">
+
+    <sql id="columns">
+        id,user_id,type,biz_id,comment_time,status,top,content,like_num,reply_num,is_delete,create_user_id,create_time,update_user_id,update_time,sys_version
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO comment (
+        user_id,
+        type,
+        biz_id,
+        comment_time,
+        status,
+        top,
+        content,
+        like_num,
+        reply_num,
+        is_delete,
+        create_user_id,
+        create_time,
+        update_user_id,
+        update_time,
+        sys_version
+        ) VALUES (
+        #{userId},
+        #{type},
+        #{bizId},
+        #{commentTime},
+        #{status},
+        #{top},
+        #{content},
+        #{likeNum},
+        #{replyNum},
+        0,
+        #{createUserId},
+        now(),
+        #{updateUserId},
+        now(),
+        1
+        )
+    </insert>
+
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO comment (
+        <if test="@Ognl@isNotEmpty(userId)">
+            user_id,
+        </if>
+        <if test="@Ognl@isNotEmpty(type)">
+            type,
+        </if>
+        <if test="@Ognl@isNotEmpty(bizId)">
+            biz_id,
+        </if>
+        <if test="@Ognl@isNotEmpty(commentTime)">
+            comment_time,
+        </if>
+        <if test="@Ognl@isNotEmpty(status)">
+            status,
+        </if>
+        <if test="@Ognl@isNotEmpty(top)">
+            top,
+        </if>
+        <if test="@Ognl@isNotEmpty(content)">
+            content,
+        </if>
+        <if test="@Ognl@isNotEmpty(likeNum)">
+            like_num,
+        </if>
+        <if test="@Ognl@isNotEmpty(replyNum)">
+            reply_num,
+        </if>
+        is_delete,
+        <if test="@Ognl@isNotEmpty(createUserId)">
+            create_user_id,
+        </if>
+        create_time,
+        <if test="@Ognl@isNotEmpty(updateUserId)">
+            update_user_id,
+        </if>
+        <if test="@Ognl@isNotEmpty(updateTime)">
+            update_time,
+        </if>
+        sys_version
+        ) VALUES (
+        <if test="@Ognl@isNotEmpty(userId)">
+            #{userId},
+        </if>
+        <if test="@Ognl@isNotEmpty(type)">
+            #{type},
+        </if>
+        <if test="@Ognl@isNotEmpty(bizId)">
+            #{bizId},
+        </if>
+        <if test="@Ognl@isNotEmpty(commentTime)">
+            #{commentTime},
+        </if>
+        <if test="@Ognl@isNotEmpty(status)">
+            #{status},
+        </if>
+        <if test="@Ognl@isNotEmpty(top)">
+            #{top},
+        </if>
+        <if test="@Ognl@isNotEmpty(content)">
+            #{content},
+        </if>
+        <if test="@Ognl@isNotEmpty(likeNum)">
+            #{likeNum},
+        </if>
+        <if test="@Ognl@isNotEmpty(replyNum)">
+            #{replyNum},
+        </if>
+        0,
+        <if test="@Ognl@isNotEmpty(createUserId)">
+            #{createUserId},
+        </if>
+        now(),
+        <if test="@Ognl@isNotEmpty(updateUserId)">
+            #{updateUserId},
+        </if>
+        <if test="@Ognl@isNotEmpty(updateTime)">
+            #{updateTime},
+        </if>
+        1
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE comment SET
+        user_id = #{userId},
+        type = #{type},
+        biz_id = #{bizId},
+        comment_time = #{commentTime},
+        status = #{status},
+        top = #{top},
+        content = #{content},
+        like_num = #{likeNum},
+        reply_num = #{replyNum},
+        is_delete = #{isDelete},
+        create_user_id = #{createUserId},
+        create_time = #{createTime},
+        update_user_id = #{updateUserId},
+        update_time = now(),
+        sys_version = sys_version + 1
+        WHERE
+        id = #{id}
+    </update>
+
+
+    <update id="updateSelective">
+        UPDATE comment SET
+        <if test="null != userId">
+            user_id = #{userId},
+        </if>
+        <if test="null != type">
+            type = #{type},
+        </if>
+        <if test="null != bizId">
+            biz_id = #{bizId},
+        </if>
+        <if test="null != commentTime">
+            comment_time = #{commentTime},
+        </if>
+        <if test="null != status">
+            status = #{status},
+        </if>
+        <if test="null != top">
+            top = #{top},
+        </if>
+        <if test="null != content">
+            content = #{content},
+        </if>
+        <if test="null != likeNum">
+            like_num = #{likeNum},
+        </if>
+        <if test="null != replyNum">
+            reply_num = #{replyNum},
+        </if>
+        <if test="null != isDelete">
+            is_delete = #{isDelete},
+        </if>
+        <if test="null != createUserId">
+            create_user_id = #{createUserId},
+        </if>
+        <if test="null != createTime">
+            create_time = #{createTime},
+        </if>
+        <if test="null != updateUserId">
+            update_user_id = #{updateUserId},
+        </if>
+        update_time = now(),
+        sys_version = sys_version + 1
+        WHERE
+        id = #{id}
+    </update>
+
+    <update id="updateByOptimisticLock">
+        UPDATE comment
+        SET
+        <if test="null != userId">
+            user_id = #{userId},
+        </if>
+        <if test="null != type">
+            type = #{type},
+        </if>
+        <if test="null != bizId">
+            biz_id = #{bizId},
+        </if>
+        <if test="null != commentTime">
+            comment_time = #{commentTime},
+        </if>
+        <if test="null != status">
+            status = #{status},
+        </if>
+        <if test="null != top">
+            top = #{top},
+        </if>
+        <if test="null != content">
+            content = #{content},
+        </if>
+        <if test="null != likeNum">
+            like_num = #{likeNum},
+        </if>
+        <if test="null != replyNum">
+            reply_num = #{replyNum},
+        </if>
+        <if test="null != isDelete">
+            is_delete = #{isDelete},
+        </if>
+        <if test="null != createUserId">
+            create_user_id = #{createUserId},
+        </if>
+        <if test="null != createTime">
+            create_time = #{createTime},
+        </if>
+        <if test="null != updateUserId">
+            update_user_id = #{updateUserId},
+        </if>
+        update_time = now(),
+        sys_version = sys_version + 1
+        WHERE
+        sys_version = #{sysVersion, jdbcType=INTEGER}
+        AND id = #{id}
+    </update>
+
+    <delete id="delete">
+        UPDATE comment
+        SET is_delete = 1
+        <if test="@Ognl@isNotEmpty(updateAccount)">
+            update_account = #{updateAccount} ,
+        </if>
+        <if test="@Ognl@isNotEmpty(updateName)">
+            update_name = #{updateName} ,
+        </if>
+        update_time = now(),
+        sys_version = sys_version + 1
+        WHERE
+        id IN
+        <foreach collection="keys" item="keyTemp" open="(" separator="," close=")">
+            #{keyTemp}
+        </foreach>
+    </delete>
+
+    <delete id="deletePhysical">
+        DELETE
+        FROM comment
+        WHERE
+        id = #{id}
+    </delete>
+
+    <select id="getByKey" resultType="CommentDO">
+        SELECT
+        <include refid="columns"/>
+        FROM comment
+        WHERE
+        id = #{id}
+    </select>
+
+    <select id="getByKeys" resultType="CommentDO">
+        SELECT
+        <include refid="columns"/>
+        FROM comment
+        WHERE
+        id IN
+        <foreach collection="keys" item="keyTemp" open="(" separator="," close=")">
+            #{keyTemp}
+        </foreach>
+    </select>
+
+    <select id="listPage" resultType="CommentDO">
+        SELECT
+        <include refid="columns"/>
+        FROM comment
+        <include refid="listPage_where"/>
+        <trim prefix="order by" prefixOverrides=",">
+            <if test="@Ognl@isNotEmpty(sortList)">
+                <foreach collection="sortList" item="sortTemp" separator=",">
+                    ${sortTemp.fieldName} ${sortTemp.sortOrder}
+                </foreach>
+            </if>
+        </trim>
+        <if test="pagination != null">
+            limit #{pagination.startRow}, #{pagination.pageSize}
+        </if>
+    </select>
+
+    <select id="listPageLimitCount" resultType="int">
+        SELECT COUNT(1)
+        FROM
+        ( SELECT count(1)
+        FROM comment
+        <include refid="listPage_where"/>
+        <if test="pagination != null">
+            limit #{pagination.startRow}, #{pagination.limitPageSize}
+        </if>
+        ) AS tagTemp
+    </select>
+
+
+    <select id="listPageCount" resultType="int">
+        SELECT count(1)
+        FROM comment
+        <include refid="listPage_where"/>
+    </select>
+
+    <sql id="listPage_where">
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="userId != null">
+                AND user_id = #{userId}
+            </if>
+            <if test="type != null">
+                AND type = #{type}
+            </if>
+            <if test="bizId != null">
+                AND biz_id = #{bizId}
+            </if>
+
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+            <if test="top != null">
+                AND top = #{top}
+            </if>
+            <if test="content != null">
+                AND content = #{content}
+            </if>
+            <if test="likeNum != null">
+                AND like_num = #{likeNum}
+            </if>
+            <if test="replyNum != null">
+                AND reply_num = #{replyNum}
+            </if>
+            <if test="isDelete != null">
+                AND is_delete = #{isDelete}
+            </if>
+            <if test="createUserId != null">
+                AND create_user_id = #{createUserId}
+            </if>
+
+            <if test="updateUserId != null">
+                AND update_user_id = #{updateUserId}
+            </if>
+
+            <if test="sysVersion != null">
+                AND sys_version = #{sysVersion}
+            </if>
+        </where>
+    </sql>
+
+</mapper>

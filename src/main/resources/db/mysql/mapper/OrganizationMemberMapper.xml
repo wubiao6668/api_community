@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.community.dao.mapper.OrganizationMemberMapper">
+
+    <sql id="columns">
+        id,user_id,org_id,status,apply_num,apply_last_time,join_reason,operator_id,role,role_alias,is_delete,create_user_id,create_time,update_user_id,update_time,sys_version
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO organization_member (
+        user_id,
+        org_id,
+        status,
+        apply_num,
+        apply_last_time,
+        join_reason,
+        operator_id,
+        role,
+        role_alias,
+        is_delete,
+        create_user_id,
+        create_time,
+        update_user_id,
+        update_time,
+        sys_version
+        ) VALUES (
+        #{userId},
+        #{orgId},
+        #{status},
+        #{applyNum},
+        #{applyLastTime},
+        #{joinReason},
+        #{operatorId},
+        #{role},
+        #{roleAlias},
+        0,
+        #{createUserId},
+        now(),
+        #{updateUserId},
+        now(),
+        1
+        )
+    </insert>
+
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO organization_member (
+        <if test="@Ognl@isNotEmpty(userId)">
+            user_id,
+        </if>
+        <if test="@Ognl@isNotEmpty(orgId)">
+            org_id,
+        </if>
+        <if test="@Ognl@isNotEmpty(status)">
+            status,
+        </if>
+        <if test="@Ognl@isNotEmpty(applyNum)">
+            apply_num,
+        </if>
+        <if test="@Ognl@isNotEmpty(applyLastTime)">
+            apply_last_time,
+        </if>
+        <if test="@Ognl@isNotEmpty(joinReason)">
+            join_reason,
+        </if>
+        <if test="@Ognl@isNotEmpty(operatorId)">
+            operator_id,
+        </if>
+        <if test="@Ognl@isNotEmpty(role)">
+            role,
+        </if>
+        <if test="@Ognl@isNotEmpty(roleAlias)">
+            role_alias,
+        </if>
+        is_delete,
+        <if test="@Ognl@isNotEmpty(createUserId)">
+            create_user_id,
+        </if>
+        create_time,
+        <if test="@Ognl@isNotEmpty(updateUserId)">
+            update_user_id,
+        </if>
+        <if test="@Ognl@isNotEmpty(updateTime)">
+            update_time,
+        </if>
+        sys_version
+        ) VALUES (
+        <if test="@Ognl@isNotEmpty(userId)">
+            #{userId},
+        </if>
+        <if test="@Ognl@isNotEmpty(orgId)">
+            #{orgId},
+        </if>
+        <if test="@Ognl@isNotEmpty(status)">
+            #{status},
+        </if>
+        <if test="@Ognl@isNotEmpty(applyNum)">
+            #{applyNum},
+        </if>
+        <if test="@Ognl@isNotEmpty(applyLastTime)">
+            #{applyLastTime},
+        </if>
+        <if test="@Ognl@isNotEmpty(joinReason)">
+            #{joinReason},
+        </if>
+        <if test="@Ognl@isNotEmpty(operatorId)">
+            #{operatorId},
+        </if>
+        <if test="@Ognl@isNotEmpty(role)">
+            #{role},
+        </if>
+        <if test="@Ognl@isNotEmpty(roleAlias)">
+            #{roleAlias},
+        </if>
+        0,
+        <if test="@Ognl@isNotEmpty(createUserId)">
+            #{createUserId},
+        </if>
+        now(),
+        <if test="@Ognl@isNotEmpty(updateUserId)">
+            #{updateUserId},
+        </if>
+        <if test="@Ognl@isNotEmpty(updateTime)">
+            #{updateTime},
+        </if>
+        1
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE organization_member SET
+        user_id = #{userId},
+        org_id = #{orgId},
+        status = #{status},
+        apply_num = #{applyNum},
+        apply_last_time = #{applyLastTime},
+        join_reason = #{joinReason},
+        operator_id = #{operatorId},
+        role = #{role},
+        role_alias = #{roleAlias},
+        is_delete = #{isDelete},
+        create_user_id = #{createUserId},
+        create_time = #{createTime},
+        update_user_id = #{updateUserId},
+        update_time = now(),
+        sys_version = sys_version + 1
+        WHERE
+        id = #{id}
+    </update>
+
+
+    <update id="updateSelective">
+        UPDATE organization_member SET
+        <if test="null != userId">
+            user_id = #{userId},
+        </if>
+        <if test="null != orgId">
+            org_id = #{orgId},
+        </if>
+        <if test="null != status">
+            status = #{status},
+        </if>
+        <if test="null != applyNum">
+            apply_num = #{applyNum},
+        </if>
+        <if test="null != applyLastTime">
+            apply_last_time = #{applyLastTime},
+        </if>
+        <if test="null != joinReason">
+            join_reason = #{joinReason},
+        </if>
+        <if test="null != operatorId">
+            operator_id = #{operatorId},
+        </if>
+        <if test="null != role">
+            role = #{role},
+        </if>
+        <if test="null != roleAlias">
+            role_alias = #{roleAlias},
+        </if>
+        <if test="null != isDelete">
+            is_delete = #{isDelete},
+        </if>
+        <if test="null != createUserId">
+            create_user_id = #{createUserId},
+        </if>
+        <if test="null != createTime">
+            create_time = #{createTime},
+        </if>
+        <if test="null != updateUserId">
+            update_user_id = #{updateUserId},
+        </if>
+        update_time = now(),
+        sys_version = sys_version + 1
+        WHERE
+        id = #{id}
+    </update>
+
+    <update id="updateByOptimisticLock">
+        UPDATE organization_member
+        SET
+        <if test="null != userId">
+            user_id = #{userId},
+        </if>
+        <if test="null != orgId">
+            org_id = #{orgId},
+        </if>
+        <if test="null != status">
+            status = #{status},
+        </if>
+        <if test="null != applyNum">
+            apply_num = #{applyNum},
+        </if>
+        <if test="null != applyLastTime">
+            apply_last_time = #{applyLastTime},
+        </if>
+        <if test="null != joinReason">
+            join_reason = #{joinReason},
+        </if>
+        <if test="null != operatorId">
+            operator_id = #{operatorId},
+        </if>
+        <if test="null != role">
+            role = #{role},
+        </if>
+        <if test="null != roleAlias">
+            role_alias = #{roleAlias},
+        </if>
+        <if test="null != isDelete">
+            is_delete = #{isDelete},
+        </if>
+        <if test="null != createUserId">
+            create_user_id = #{createUserId},
+        </if>
+        <if test="null != createTime">
+            create_time = #{createTime},
+        </if>
+        <if test="null != updateUserId">
+            update_user_id = #{updateUserId},
+        </if>
+        update_time = now(),
+        sys_version = sys_version + 1
+        WHERE
+        sys_version = #{sysVersion, jdbcType=INTEGER}
+        AND id = #{id}
+    </update>
+
+    <delete id="delete">
+        UPDATE organization_member
+        SET is_delete = 1
+        <if test="@Ognl@isNotEmpty(updateAccount)">
+            update_account = #{updateAccount} ,
+        </if>
+        <if test="@Ognl@isNotEmpty(updateName)">
+            update_name = #{updateName} ,
+        </if>
+        update_time = now(),
+        sys_version = sys_version + 1
+        WHERE
+        id IN
+        <foreach collection="keys" item="keyTemp" open="(" separator="," close=")">
+            #{keyTemp}
+        </foreach>
+    </delete>
+
+    <delete id="deletePhysical">
+        DELETE
+        FROM organization_member
+        WHERE
+        id = #{id}
+    </delete>
+
+    <select id="getByKey" resultType="OrganizationMemberDO">
+        SELECT
+        <include refid="columns"/>
+        FROM organization_member
+        WHERE
+        id = #{id}
+    </select>
+
+    <select id="getByKeys" resultType="OrganizationMemberDO">
+        SELECT
+        <include refid="columns"/>
+        FROM organization_member
+        WHERE
+        id IN
+        <foreach collection="keys" item="keyTemp" open="(" separator="," close=")">
+            #{keyTemp}
+        </foreach>
+    </select>
+
+    <select id="listPage" resultType="OrganizationMemberDO">
+        SELECT
+        <include refid="columns"/>
+        FROM organization_member
+        <include refid="listPage_where"/>
+        <trim prefix="order by" prefixOverrides=",">
+            <if test="@Ognl@isNotEmpty(sortList)">
+                <foreach collection="sortList" item="sortTemp" separator=",">
+                    ${sortTemp.fieldName} ${sortTemp.sortOrder}
+                </foreach>
+            </if>
+        </trim>
+        <if test="pagination != null">
+            limit #{pagination.startRow}, #{pagination.pageSize}
+        </if>
+    </select>
+
+    <select id="listPageLimitCount" resultType="int">
+        SELECT COUNT(1)
+        FROM
+        ( SELECT count(1)
+        FROM organization_member
+        <include refid="listPage_where"/>
+        <if test="pagination != null">
+            limit #{pagination.startRow}, #{pagination.limitPageSize}
+        </if>
+        ) AS tagTemp
+    </select>
+
+
+    <select id="listPageCount" resultType="int">
+        SELECT count(1)
+        FROM organization_member
+        <include refid="listPage_where"/>
+    </select>
+
+    <sql id="listPage_where">
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="userId != null">
+                AND user_id = #{userId}
+            </if>
+            <if test="orgId != null">
+                AND org_id = #{orgId}
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+            <if test="applyNum != null">
+                AND apply_num = #{applyNum}
+            </if>
+
+            <if test="joinReason != null">
+                AND join_reason = #{joinReason}
+            </if>
+            <if test="operatorId != null">
+                AND operator_id = #{operatorId}
+            </if>
+            <if test="role != null">
+                AND role = #{role}
+            </if>
+            <if test="roleAlias != null">
+                AND role_alias = #{roleAlias}
+            </if>
+            <if test="isDelete != null">
+                AND is_delete = #{isDelete}
+            </if>
+            <if test="createUserId != null">
+                AND create_user_id = #{createUserId}
+            </if>
+
+            <if test="updateUserId != null">
+                AND update_user_id = #{updateUserId}
+            </if>
+
+            <if test="sysVersion != null">
+                AND sys_version = #{sysVersion}
+            </if>
+        </where>
+    </sql>
+
+</mapper>

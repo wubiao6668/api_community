@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.community.dao.mapper.ActivityMapper">
+
+    <sql id="columns">
+        id,originator_user_id,name,introduction,img,sign_up_way,sign_up_question,post_permission,latitude,longitude,start_time,end_time,sign_up_num,post_num,view_num,is_delete,create_user_id,create_time,update_user_id,update_time,sys_version
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO activity (
+        originator_user_id,
+        name,
+        introduction,
+        img,
+        sign_up_way,
+        sign_up_question,
+        post_permission,
+        latitude,
+        longitude,
+        start_time,
+        end_time,
+        sign_up_num,
+        post_num,
+        view_num,
+        is_delete,
+        create_user_id,
+        create_time,
+        update_user_id,
+        update_time,
+        sys_version
+        ) VALUES (
+        #{originatorUserId},
+        #{name},
+        #{introduction},
+        #{img},
+        #{signUpWay},
+        #{signUpQuestion},
+        #{postPermission},
+        #{latitude},
+        #{longitude},
+        #{startTime},
+        #{endTime},
+        #{signUpNum},
+        #{postNum},
+        #{viewNum},
+        0,
+        #{createUserId},
+        now(),
+        #{updateUserId},
+        now(),
+        1
+        )
+    </insert>
+
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO activity (
+        <if test="@Ognl@isNotEmpty(originatorUserId)">
+            originator_user_id,
+        </if>
+        <if test="@Ognl@isNotEmpty(name)">
+            name,
+        </if>
+        <if test="@Ognl@isNotEmpty(introduction)">
+            introduction,
+        </if>
+        <if test="@Ognl@isNotEmpty(img)">
+            img,
+        </if>
+        <if test="@Ognl@isNotEmpty(signUpWay)">
+            sign_up_way,
+        </if>
+        <if test="@Ognl@isNotEmpty(signUpQuestion)">
+            sign_up_question,
+        </if>
+        <if test="@Ognl@isNotEmpty(postPermission)">
+            post_permission,
+        </if>
+        <if test="@Ognl@isNotEmpty(latitude)">
+            latitude,
+        </if>
+        <if test="@Ognl@isNotEmpty(longitude)">
+            longitude,
+        </if>
+        <if test="@Ognl@isNotEmpty(startTime)">
+            start_time,
+        </if>
+        <if test="@Ognl@isNotEmpty(endTime)">
+            end_time,
+        </if>
+        <if test="@Ognl@isNotEmpty(signUpNum)">
+            sign_up_num,
+        </if>
+        <if test="@Ognl@isNotEmpty(postNum)">
+            post_num,
+        </if>
+        <if test="@Ognl@isNotEmpty(viewNum)">
+            view_num,
+        </if>
+        is_delete,
+        <if test="@Ognl@isNotEmpty(createUserId)">
+            create_user_id,
+        </if>
+        create_time,
+        <if test="@Ognl@isNotEmpty(updateUserId)">
+            update_user_id,
+        </if>
+        <if test="@Ognl@isNotEmpty(updateTime)">
+            update_time,
+        </if>
+        sys_version
+        ) VALUES (
+        <if test="@Ognl@isNotEmpty(originatorUserId)">
+            #{originatorUserId},
+        </if>
+        <if test="@Ognl@isNotEmpty(name)">
+            #{name},
+        </if>
+        <if test="@Ognl@isNotEmpty(introduction)">
+            #{introduction},
+        </if>
+        <if test="@Ognl@isNotEmpty(img)">
+            #{img},
+        </if>
+        <if test="@Ognl@isNotEmpty(signUpWay)">
+            #{signUpWay},
+        </if>
+        <if test="@Ognl@isNotEmpty(signUpQuestion)">
+            #{signUpQuestion},
+        </if>
+        <if test="@Ognl@isNotEmpty(postPermission)">
+            #{postPermission},
+        </if>
+        <if test="@Ognl@isNotEmpty(latitude)">
+            #{latitude},
+        </if>
+        <if test="@Ognl@isNotEmpty(longitude)">
+            #{longitude},
+        </if>
+        <if test="@Ognl@isNotEmpty(startTime)">
+            #{startTime},
+        </if>
+        <if test="@Ognl@isNotEmpty(endTime)">
+            #{endTime},
+        </if>
+        <if test="@Ognl@isNotEmpty(signUpNum)">
+            #{signUpNum},
+        </if>
+        <if test="@Ognl@isNotEmpty(postNum)">
+            #{postNum},
+        </if>
+        <if test="@Ognl@isNotEmpty(viewNum)">
+            #{viewNum},
+        </if>
+        0,
+        <if test="@Ognl@isNotEmpty(createUserId)">
+            #{createUserId},
+        </if>
+        now(),
+        <if test="@Ognl@isNotEmpty(updateUserId)">
+            #{updateUserId},
+        </if>
+        <if test="@Ognl@isNotEmpty(updateTime)">
+            #{updateTime},
+        </if>
+        1
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE activity SET
+        originator_user_id = #{originatorUserId},
+        name = #{name},
+        introduction = #{introduction},
+        img = #{img},
+        sign_up_way = #{signUpWay},
+        sign_up_question = #{signUpQuestion},
+        post_permission = #{postPermission},
+        latitude = #{latitude},
+        longitude = #{longitude},
+        start_time = #{startTime},
+        end_time = #{endTime},
+        sign_up_num = #{signUpNum},
+        post_num = #{postNum},
+        view_num = #{viewNum},
+        is_delete = #{isDelete},
+        create_user_id = #{createUserId},
+        create_time = #{createTime},
+        update_user_id = #{updateUserId},
+        update_time = now(),
+        sys_version = sys_version + 1
+        WHERE
+        id = #{id}
+    </update>
+
+
+    <update id="updateSelective">
+        UPDATE activity SET
+        <if test="null != originatorUserId">
+            originator_user_id = #{originatorUserId},
+        </if>
+        <if test="null != name">
+            name = #{name},
+        </if>
+        <if test="null != introduction">
+            introduction = #{introduction},
+        </if>
+        <if test="null != img">
+            img = #{img},
+        </if>
+        <if test="null != signUpWay">
+            sign_up_way = #{signUpWay},
+        </if>
+        <if test="null != signUpQuestion">
+            sign_up_question = #{signUpQuestion},
+        </if>
+        <if test="null != postPermission">
+            post_permission = #{postPermission},
+        </if>
+        <if test="null != latitude">
+            latitude = #{latitude},
+        </if>
+        <if test="null != longitude">
+            longitude = #{longitude},
+        </if>
+        <if test="null != startTime">
+            start_time = #{startTime},
+        </if>
+        <if test="null != endTime">
+            end_time = #{endTime},
+        </if>
+        <if test="null != signUpNum">
+            sign_up_num = #{signUpNum},
+        </if>
+        <if test="null != postNum">
+            post_num = #{postNum},
+        </if>
+        <if test="null != viewNum">
+            view_num = #{viewNum},
+        </if>
+        <if test="null != isDelete">
+            is_delete = #{isDelete},
+        </if>
+        <if test="null != createUserId">
+            create_user_id = #{createUserId},
+        </if>
+        <if test="null != createTime">
+            create_time = #{createTime},
+        </if>
+        <if test="null != updateUserId">
+            update_user_id = #{updateUserId},
+        </if>
+        update_time = now(),
+        sys_version = sys_version + 1
+        WHERE
+        id = #{id}
+    </update>
+
+    <update id="updateByOptimisticLock">
+        UPDATE activity
+        SET
+        <if test="null != originatorUserId">
+            originator_user_id = #{originatorUserId},
+        </if>
+        <if test="null != name">
+            name = #{name},
+        </if>
+        <if test="null != introduction">
+            introduction = #{introduction},
+        </if>
+        <if test="null != img">
+            img = #{img},
+        </if>
+        <if test="null != signUpWay">
+            sign_up_way = #{signUpWay},
+        </if>
+        <if test="null != signUpQuestion">
+            sign_up_question = #{signUpQuestion},
+        </if>
+        <if test="null != postPermission">
+            post_permission = #{postPermission},
+        </if>
+        <if test="null != latitude">
+            latitude = #{latitude},
+        </if>
+        <if test="null != longitude">
+            longitude = #{longitude},
+        </if>
+        <if test="null != startTime">
+            start_time = #{startTime},
+        </if>
+        <if test="null != endTime">
+            end_time = #{endTime},
+        </if>
+        <if test="null != signUpNum">
+            sign_up_num = #{signUpNum},
+        </if>
+        <if test="null != postNum">
+            post_num = #{postNum},
+        </if>
+        <if test="null != viewNum">
+            view_num = #{viewNum},
+        </if>
+        <if test="null != isDelete">
+            is_delete = #{isDelete},
+        </if>
+        <if test="null != createUserId">
+            create_user_id = #{createUserId},
+        </if>
+        <if test="null != createTime">
+            create_time = #{createTime},
+        </if>
+        <if test="null != updateUserId">
+            update_user_id = #{updateUserId},
+        </if>
+        update_time = now(),
+        sys_version = sys_version + 1
+        WHERE
+        sys_version = #{sysVersion, jdbcType=INTEGER}
+        AND id = #{id}
+    </update>
+
+    <delete id="delete">
+        UPDATE activity
+        SET is_delete = 1
+        <if test="@Ognl@isNotEmpty(updateAccount)">
+            update_account = #{updateAccount} ,
+        </if>
+        <if test="@Ognl@isNotEmpty(updateName)">
+            update_name = #{updateName} ,
+        </if>
+        update_time = now(),
+        sys_version = sys_version + 1
+        WHERE
+        id IN
+        <foreach collection="keys" item="keyTemp" open="(" separator="," close=")">
+            #{keyTemp}
+        </foreach>
+    </delete>
+
+    <delete id="deletePhysical">
+        DELETE
+        FROM activity
+        WHERE
+        id = #{id}
+    </delete>
+
+    <select id="getByKey" resultType="ActivityDO">
+        SELECT
+        <include refid="columns"/>
+        FROM activity
+        WHERE
+        id = #{id}
+    </select>
+
+    <select id="getByKeys" resultType="ActivityDO">
+        SELECT
+        <include refid="columns"/>
+        FROM activity
+        WHERE
+        id IN
+        <foreach collection="keys" item="keyTemp" open="(" separator="," close=")">
+            #{keyTemp}
+        </foreach>
+    </select>
+
+    <select id="listPage" resultType="ActivityDO">
+        SELECT
+        <include refid="columns"/>
+        FROM activity
+        <include refid="listPage_where"/>
+        <trim prefix="order by" prefixOverrides=",">
+            <if test="@Ognl@isNotEmpty(sortList)">
+                <foreach collection="sortList" item="sortTemp" separator=",">
+                    ${sortTemp.fieldName} ${sortTemp.sortOrder}
+                </foreach>
+            </if>
+        </trim>
+        <if test="pagination != null">
+            limit #{pagination.startRow}, #{pagination.pageSize}
+        </if>
+    </select>
+
+    <select id="listPageLimitCount" resultType="int">
+        SELECT COUNT(1)
+        FROM
+        ( SELECT count(1)
+        FROM activity
+        <include refid="listPage_where"/>
+        <if test="pagination != null">
+            limit #{pagination.startRow}, #{pagination.limitPageSize}
+        </if>
+        ) AS tagTemp
+    </select>
+
+
+    <select id="listPageCount" resultType="int">
+        SELECT count(1)
+        FROM activity
+        <include refid="listPage_where"/>
+    </select>
+
+    <sql id="listPage_where">
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="originatorUserId != null">
+                AND originator_user_id = #{originatorUserId}
+            </if>
+            <if test="name != null">
+                AND name = #{name}
+            </if>
+            <if test="introduction != null">
+                AND introduction = #{introduction}
+            </if>
+            <if test="img != null">
+                AND img = #{img}
+            </if>
+            <if test="signUpWay != null">
+                AND sign_up_way = #{signUpWay}
+            </if>
+            <if test="signUpQuestion != null">
+                AND sign_up_question = #{signUpQuestion}
+            </if>
+            <if test="postPermission != null">
+                AND post_permission = #{postPermission}
+            </if>
+            <if test="latitude != null">
+                AND latitude = #{latitude}
+            </if>
+            <if test="longitude != null">
+                AND longitude = #{longitude}
+            </if>
+
+
+            <if test="signUpNum != null">
+                AND sign_up_num = #{signUpNum}
+            </if>
+            <if test="postNum != null">
+                AND post_num = #{postNum}
+            </if>
+            <if test="viewNum != null">
+                AND view_num = #{viewNum}
+            </if>
+            <if test="isDelete != null">
+                AND is_delete = #{isDelete}
+            </if>
+            <if test="createUserId != null">
+                AND create_user_id = #{createUserId}
+            </if>
+
+            <if test="updateUserId != null">
+                AND update_user_id = #{updateUserId}
+            </if>
+
+            <if test="sysVersion != null">
+                AND sys_version = #{sysVersion}
+            </if>
+        </where>
+    </sql>
+
+</mapper>
