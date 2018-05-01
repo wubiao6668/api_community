@@ -1,5 +1,5 @@
 /**
- * Created by wubiao on - 2018/04/30.
+ * Created by wubiao on - 2018/05/01.
  */
 
 package com.community.domain.model.db;
@@ -58,6 +58,10 @@ public class ContentDO implements Serializable {
      * 置顶（0-正常、1-置顶）
      */
     private Integer top;
+    /**
+     * 图片个数
+     */
+    private Integer imgNum;
     /**
      * 评论数、(问题)回答数
      */

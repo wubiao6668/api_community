@@ -3,7 +3,7 @@
 <mapper namespace="com.community.dao.mapper.ContentMapper">
 
     <sql id="columns">
-        id,user_id,title,content_json,latitude,longitude,type,biz_id,biz_child_id,status,top,comment_num,view_num,like_num,favorite_num,follow_num,tag_id,tag_extend,is_delete,create_user_id,create_time,update_user_id,update_time,sys_version
+        id,user_id,title,content_json,latitude,longitude,type,biz_id,biz_child_id,status,top,img_num,comment_num,view_num,like_num,favorite_num,follow_num,tag_id,tag_extend,is_delete,create_user_id,create_time,update_user_id,update_time,sys_version
     </sql>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
@@ -18,6 +18,7 @@
         biz_child_id,
         status,
         top,
+        img_num,
         comment_num,
         view_num,
         like_num,
@@ -42,6 +43,7 @@
         #{bizChildId},
         #{status},
         #{top},
+        #{imgNum},
         #{commentNum},
         #{viewNum},
         #{likeNum},
@@ -89,6 +91,9 @@
         </if>
         <if test="@Ognl@isNotEmpty(top)">
             top,
+        </if>
+        <if test="@Ognl@isNotEmpty(imgNum)">
+            img_num,
         </if>
         <if test="@Ognl@isNotEmpty(commentNum)">
             comment_num,
@@ -154,6 +159,9 @@
         <if test="@Ognl@isNotEmpty(top)">
             #{top},
         </if>
+        <if test="@Ognl@isNotEmpty(imgNum)">
+            #{imgNum},
+        </if>
         <if test="@Ognl@isNotEmpty(commentNum)">
             #{commentNum},
         </if>
@@ -202,6 +210,7 @@
         biz_child_id = #{bizChildId},
         status = #{status},
         top = #{top},
+        img_num = #{imgNum},
         comment_num = #{commentNum},
         view_num = #{viewNum},
         like_num = #{likeNum},
@@ -251,6 +260,9 @@
         </if>
         <if test="null != top">
             top = #{top},
+        </if>
+        <if test="null != imgNum">
+            img_num = #{imgNum},
         </if>
         <if test="null != commentNum">
             comment_num = #{commentNum},
@@ -323,6 +335,9 @@
         </if>
         <if test="null != top">
             top = #{top},
+        </if>
+        <if test="null != imgNum">
+            img_num = #{imgNum},
         </if>
         <if test="null != commentNum">
             comment_num = #{commentNum},
@@ -478,6 +493,9 @@
             </if>
             <if test="top != null">
                 AND top = #{top}
+            </if>
+            <if test="imgNum != null">
+                AND img_num = #{imgNum}
             </if>
             <if test="commentNum != null">
                 AND comment_num = #{commentNum}
