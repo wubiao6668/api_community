@@ -15,30 +15,25 @@ import static com.community.common.constant.Constant.MAX_SUMMARY_LENGTH;
 public class ContentUtils {
 
     /**
-     * 设置摘要和计算图片总数
+     * 设置摘要
      *
      * @param contentResponse
      * @return
      */
-    public static String extractSummaryAndCalculateImgNum(ContentResponse contentResponse) {
+    public static String extractSummary(ContentResponse contentResponse) {
         String contentJson = contentResponse.getContentJson();
         StringBuilder summarySb = new StringBuilder();
         if (StringUtils.isNotEmpty(contentJson)) {
             List<ContentBO> contentBOList = JSON.parseObject(contentJson, new TypeReference<List<ContentBO>>() {
             });
             contentResponse.setContentList(contentBOList);
-            Integer imgNum = 0;
             if (CollectionUtils.isNotEmpty(contentBOList)) {
                 for (ContentBO contentBOTemp : contentBOList) {
-                    //计算图片个数
-                    boolean isImgType = Constant.ContextTypeEnum.IMG.equals(contentBOTemp.getType());
-                    if (isImgType) {
-                        imgNum++;
-                    }
                     //计算摘要
                     if (summarySb.length() >= MAX_SUMMARY_LENGTH) {
-                        continue;
+                        break;
                     }
+                    boolean isImgType = Constant.ContextTypeEnum.IMG.equals(contentBOTemp.getType());
                     if (isImgType) {
                         String text = contentBOTemp.getText();
                         text = null != text ? text.substring(0, MAX_SUMMARY_LENGTH) : "";
@@ -46,22 +41,24 @@ public class ContentUtils {
                     }
                 }
             }
-            contentResponse.setImgNum(imgNum);
         }
         return summarySb.toString();
     }
 
     /**
-     * 设置摘要和计算图片总数
+     * 设置摘要
      *
      * @param contentResponseList
      * @return
      */
-    public static void extractSummaryAndCalculateImgNum(List<ContentResponse> contentResponseList) {
+    public static void extractSummary(List<ContentResponse> contentResponseList) {
         if (CollectionUtils.isEmpty(contentResponseList)) {
             return;
         }
-        contentResponseList.forEach(contentResponse -> extractSummaryAndCalculateImgNum(contentResponse));
+        contentResponseList.forEach(contentResponse -> {
+            //设置摘要
+            contentResponse.setSummary(extractSummary(contentResponse));
+        });
     }
 
 

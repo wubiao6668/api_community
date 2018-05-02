@@ -94,7 +94,7 @@ public class OrganizationManager {
         OrganizationResponse organizationResponse = BeanUtils.copyProperties(organizationDO, OrganizationResponse.class);
         //转化返回值
         List<ContentResponse> contentResponseList = BeanUtils.list2list(contentDOList, ContentResponse.class);
-        ContentUtils.extractSummaryAndCalculateImgNum(contentResponseList);
+        ContentUtils.extractSummary(contentResponseList);
         List<ActivityResponse> activityResponseList = BeanUtils.list2list(activityDOList, ActivityResponse.class);
         List<TagResponse> tagResponseList = BeanUtils.list2list(activityDOList, TagResponse.class);
         OrganizationMemberResponse organizationMemberResponse = BeanUtils.copyProperties(organizationMemberDO, OrganizationMemberResponse.class);

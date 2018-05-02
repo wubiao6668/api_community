@@ -32,11 +32,6 @@ public class ContentResponse extends ContentDO implements Serializable {
      * contentJson 转成 对象
      */
     private List<ContentBO> contentList;
-    /**
-     * 图片数
-     */
-    private Integer imgNum;
-
 
     /**
      * createTime

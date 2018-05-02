@@ -21,9 +21,13 @@
         <!--Model-->
     </typeAliases>
 
+    <typeHandlers>
+        <!--<typeHandler handler="com.community.common.db.mybatis.typehandler.ObjectJsonTypeHandler"/>-->
+        <typeHandler handler="com.community.common.db.mybatis.typehandler.ContentBOArrayTypeHandler"/>
+    </typeHandlers>
+
     <plugins>
         <plugin interceptor="com.community.common.db.mybatis.interceptor.PageExecutorInterceptor"/>
-        <!--<plugin interceptor="com.community.common.db.mybatis.interceptor.PageResultInterceptor"/>-->
     </plugins>
 
 </configuration>

@@ -11,7 +11,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 /**
- * 集合工具
+ * 对象转换工具
  */
 public class BeanUtils {
 
