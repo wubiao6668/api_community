@@ -15,11 +15,6 @@ import java.sql.SQLException;
 
 @MappedTypes(ContentBO[].class)
 public class ContentBOArrayTypeHandler extends BaseTypeHandler<ContentBO[]> {
-    private final Class<ContentBO[]> type;
-
-    public ContentBOArrayTypeHandler(Class<ContentBO[]> type) {
-        this.type = type;
-    }
 
     @Override
     public void setNonNullParameter(PreparedStatement ps, int i, ContentBO[] parameter, JdbcType jdbcType) throws SQLException {
