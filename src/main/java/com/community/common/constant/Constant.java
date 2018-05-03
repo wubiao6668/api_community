@@ -15,10 +15,37 @@ public class Constant {
      */
     public static final int MAX_SUMMARY_LENGTH = 160;
 
-    public enum ShowEnum{
-        SHOW(0,"展示"),
-        HIDE(-1,"隐藏"),
-        ;
+    public enum IsDeleteEnum {
+        NO(0, "未删除"),
+        YES(1, "已删除");
+        private Integer code;
+        private String desc;
+
+        IsDeleteEnum(Integer code, String desc) {
+            this.code = code;
+            this.desc = desc;
+        }
+
+        public Integer getCode() {
+            return code;
+        }
+
+        public void setCode(Integer code) {
+            this.code = code;
+        }
+
+        public String getDesc() {
+            return desc;
+        }
+
+        public void setDesc(String desc) {
+            this.desc = desc;
+        }
+    }
+
+    public enum ShowEnum {
+        SHOW(0, "展示"),
+        HIDE(-1, "隐藏"),;
         private Integer code;
         private String desc;
 

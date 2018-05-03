@@ -18,9 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("api.activity")
 public class ActivityApiController extends AbstractAction<ActivityService, ActivityManager> {
 
-    @RequestMapping("list.page")
-    public Response<ActivityResponse> lisPage(@RequestJsonParam("request") ActivityRequest request) {
+    @RequestMapping("list")
+    public Response<ActivityResponse> listPage(@RequestJsonParam("request") ActivityRequest request) {
         return service.listPage(request, ActivityResponse.class);
     }
+
+
+
 
 }

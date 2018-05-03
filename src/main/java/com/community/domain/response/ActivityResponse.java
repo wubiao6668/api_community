@@ -15,6 +15,10 @@ public class ActivityResponse extends ActivityDO implements Serializable {
     private static final long serialVersionUID = 5454155825314635342L;
 
     /**
+     * 发起人
+     */
+    private UserInfoResponse originatorUserInfo;
+    /**
      * 活动开始时间
      */
     private String startTimeShow;
