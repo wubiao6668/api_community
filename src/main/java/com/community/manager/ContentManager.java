@@ -15,7 +15,10 @@ import com.community.domain.model.db.ContentDO;
 import com.community.domain.model.db.OrganizationDO;
 import com.community.domain.model.db.UserInfoDO;
 import com.community.domain.request.ContentRequest;
+import com.community.domain.response.ActivityResponse;
 import com.community.domain.response.ContentResponse;
+import com.community.domain.response.OrganizationResponse;
+import com.community.domain.response.UserInfoResponse;
 import com.google.common.collect.Sets;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,13 +63,16 @@ public class ContentManager {
             //发帖人id
             Set<Long> userIdSet = Sets.newHashSet();
             contentResponseList.forEach(contentResponse -> {
+                //组织
                 if (TypeEnum.ORG.getCode().equals(contentResponse.getType()) || TypeEnum.ACTIVITY.getCode().equals(contentResponse.getType())) {
                     orgIdSet.add(contentResponse.getBizId());
                 }
-                userIdSet.add(contentResponse.getUserId());
+                //活动
                 if (TypeEnum.ACTIVITY.getCode().equals(contentResponse.getType())) {
                     activityIdSet.add(contentResponse.getBizChildId());
                 }
+                //发帖人id
+                userIdSet.add(contentResponse.getUserId());
             });
             //查询活动
             Future<Map<Long, ActivityDO>> activityFuture = activityManager.getActivityByIdsAsync(activityIdSet);
@@ -86,14 +92,39 @@ public class ContentManager {
         return null;
     }
 
-    public List<ContentResponse> test(List<ContentResponse> contentResponseList) {
+    public List<ContentResponse> setOrgActivityAndUserInfo(List<ContentResponse> contentResponseList,
+                                                           Map<Long, OrganizationDO> organizationDOMap,
+                                                           Map<Long, ActivityDO> activityDOMap, Map<Long, UserInfoDO> userInfoDOMap) {
         if (CollectionUtils.isEmpty(contentResponseList)) {
             return contentResponseList;
         }
 
 
+        contentResponseList.forEach(contentResponse -> {
+            //发帖人id
+            UserInfoDO userInfoDO = null != userInfoDOMap && null != (userInfoDO = userInfoDOMap.get(contentResponse.getUserId())) ? userInfoDO : null;
+            if (null != userInfoDO) {
+                UserInfoResponse userInfoResponse = BeanUtils.copyProperties(userInfoDO, UserInfoResponse.class);
+                contentResponse.setUserInfo(userInfoResponse);
+            }
+            //组织
+            if (TypeEnum.ORG.getCode().equals(contentResponse.getType()) || TypeEnum.ACTIVITY.getCode().equals(contentResponse.getType())) {
+                OrganizationDO organizationDO = null != organizationDOMap && null != (organizationDO = organizationDOMap.get(contentResponse.getBizId())) ? organizationDO : null;
+                if (null != organizationDO) {
+                    OrganizationResponse organizationResponse = BeanUtils.copyProperties(organizationDO, OrganizationResponse.class);
+                    contentResponse.setOrganization(organizationResponse);
+                }
+            }
+            //活动
+            if (TypeEnum.ACTIVITY.getCode().equals(contentResponse.getType())) {
+                ActivityDO activityDO = null != activityDOMap && null != (activityDO = activityDOMap.get(contentResponse.getBizId())) ? activityDO : null;
+                if (null != activityDO) {
+                    ActivityResponse activityResponse = BeanUtils.copyProperties(activityDO, ActivityResponse.class);
+                    contentResponse.setActivity(activityResponse);
+                }
+            }
+        });
         return contentResponseList;
     }
-
 
 }

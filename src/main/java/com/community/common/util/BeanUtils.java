@@ -265,12 +265,12 @@ public class BeanUtils {
 
 
     /**
-     * javabeanת��
-     * ע�⣺���ܷ���null
+     * 类转换
      *
-     * @param source        Դ����
-     * @param tClazz        Ŀ�����
-     * @param <T>Ŀ���������
+     * @param source 源对象
+     * @param tClazz 目标对象
+     * @param <S>    源对象类型
+     * @param <T>    目标对象类型
      * @return
      */
     public static <S, T> T copyProperties(S source, Class<T> tClazz) {

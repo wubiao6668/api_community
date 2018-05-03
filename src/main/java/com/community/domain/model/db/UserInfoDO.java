@@ -1,5 +1,5 @@
 /**
- * Created by wubiao on - 2018/05/01.
+ * Created by wubiao on - 2018/05/03.
  */
 
 package com.community.domain.model.db;
@@ -21,7 +21,15 @@ public class UserInfoDO implements Serializable {
     /**
      * 名称
      */
-    private String name;
+    private String nickName;
+    /**
+     * 头像
+     */
+    private String avatar;
+    /**
+     * 电子邮件
+     */
+    private String email;
     /**
      * 个人简介
      */

@@ -32,6 +32,18 @@ public class ContentResponse extends ContentDO implements Serializable {
      * contentJson 转成 对象
      */
     private List<ContentBO> contentList;
+    /**
+     * 组织
+     */
+    private OrganizationResponse organization;
+    /**
+     * 活动
+     */
+    private ActivityResponse activity;
+    /**
+     * 发帖人
+     */
+    private UserInfoResponse userInfo;
 
     /**
      * createTime
