@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public abstract class AbstractCurdService<KEY, Q extends PageAble, M, T, Mapper> {
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -54,7 +55,7 @@ public abstract class AbstractCurdService<KEY, Q extends PageAble, M, T, Mapper>
         return Response.success((M) ((GetByKeyAble) mapper).getByKey(key));
     }
 
-    public Response getByKeys(KEY... keys) {
+    public Response getByKeys(Set<KEY> keys) {
         return Response.success(((GetByKeysAble) mapper).getByKeys(keys));
     }
 

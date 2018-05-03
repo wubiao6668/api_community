@@ -8,9 +8,12 @@ import com.community.dao.mapper.UserInfoMapper;
 import com.community.domain.core.Page;
 import com.community.domain.model.db.UserInfoDO;
 import com.community.domain.request.UserInfoRequest;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
@@ -22,5 +25,12 @@ public class UserInfoManager {
 
     public Future<Page<UserInfoDO>> listPageAsync(UserInfoRequest request) {
         return CompletableFuture.supplyAsync(() -> userInfoMapper.listPage(request));
+    }
+
+    Future<Map<Long, UserInfoDO>> getUserInfoByIdsAsync(Set<Long> userIdSets) {
+        if (CollectionUtils.isEmpty(userIdSets)) {
+            return null;
+        }
+        return CompletableFuture.supplyAsync(() -> userInfoMapper.getByKeys(userIdSets));
     }
 }
