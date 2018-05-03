@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +31,7 @@ public class BeanUtils {
 
         Map<K, Collection<V>> map = Maps.newLinkedHashMap();
 
-        if (isEmpty(list)) {
+        if (CollectionUtils.isEmpty(list)) {
             return map;
         }
 
@@ -69,7 +70,7 @@ public class BeanUtils {
      */
     public static <V, E> List<V> getFieldList(Collection<E> collection, String keyProp) {
         List<V> list = Lists.newArrayList();
-        if (isEmpty(collection)) {
+        if (CollectionUtils.isEmpty(collection)) {
             return list;
         }
 
@@ -102,7 +103,7 @@ public class BeanUtils {
 
         //保证有序
         Map<K, V> map = Maps.newLinkedHashMap();
-        if (isEmpty(collection)) {
+        if (CollectionUtils.isEmpty(collection)) {
             return map;
         }
         try {
@@ -136,7 +137,7 @@ public class BeanUtils {
     public static <V> Map<String, V> list2Map(Collection<V> collection, String... keyProps) {
 
         Map<String, V> map = Maps.newLinkedHashMap();
-        if (isEmpty(collection)) {
+        if (CollectionUtils.isEmpty(collection)) {
             return map;
         }
         try {
@@ -186,7 +187,7 @@ public class BeanUtils {
 
         Map<K, V> map = Maps.newLinkedHashMap();
 
-        if (isEmpty(collection))
+        if (CollectionUtils.isEmpty(collection))
             return map;
 
         try {
@@ -221,7 +222,7 @@ public class BeanUtils {
         if (map == null)
             map = Maps.newLinkedHashMap();
 
-        if (isEmpty(collection))
+        if (CollectionUtils.isEmpty(collection))
             return map;
 
         try {
@@ -247,7 +248,7 @@ public class BeanUtils {
      * @return
      */
     public static <T, S> List<T> list2list(List<S> sourceList, Class<T> tClazz) {
-        if (isEmpty(sourceList))
+        if (CollectionUtils.isEmpty(sourceList))
             return Lists.newArrayList();
         List<T> targetList = Lists.newArrayList();
 
@@ -301,7 +302,7 @@ public class BeanUtils {
     public static <K, T, S> Map<K, T> map2Map(Map<K, S> sourceMap, Class<T> tClazz) {
 
         Map<K, T> map = Maps.newHashMap();
-        if (isEmpty(sourceMap))
+        if (MapUtils.isEmpty(sourceMap))
             return map;
 
         try {
@@ -357,50 +358,5 @@ public class BeanUtils {
             size++;
         }
         return result;
-    }
-
-    public static boolean isEmpty(Map<?, ?> map) {
-        return map == null || map.isEmpty();
-    }
-
-    public static boolean isNotEmpty(Map<?, ?> map) {
-        return false == (map == null || map.isEmpty());
-    }
-
-    public static boolean isNotEmpty(Collection collection) {
-        return false == (collection == null || collection.isEmpty());
-    }
-
-    /**
-     * 判断是否多余和去掉多余的
-     *
-     * @param list
-     * @param pageSize
-     * @return
-     */
-    public static boolean isHasMoreAndRemoveSurplus(List<?> list, int pageSize) {
-        boolean isHasMore = false;
-        if (isNotEmpty(list)) {
-            int size = list.size();
-            if (size > pageSize) {
-                isHasMore = true;
-                for (int i = pageSize; i < size; i++) {
-                    list.remove(pageSize);
-                }
-            }
-        }
-        return isHasMore;
-    }
-
-    public static boolean isEmpty(Collection collection) {
-        return collection == null || collection.isEmpty();
-    }
-
-
-    public final static void main(String[] arg) {
-        List list = Lists.newArrayList("1", "2", "3", "4", "5", "6");
-        boolean isHasMore = isHasMoreAndRemoveSurplus(list, 2);
-        System.out.print(isHasMore);
-        System.out.print(list);
     }
 }
