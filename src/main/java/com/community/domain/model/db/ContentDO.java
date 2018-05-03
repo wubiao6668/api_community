@@ -5,6 +5,7 @@
 package com.community.domain.model.db;
 
 import com.community.domain.bo.ContentBO;
+import com.community.domain.bo.TagBO;
 import lombok.Data;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
@@ -90,7 +91,7 @@ public class ContentDO implements Serializable {
     /**
      * 自定义标签
      */
-    private String tagExtend;
+    private TagBO[] tagExtend;
     /**
      * 是否删除（0-未删除、1-已删除）
      */
