@@ -50,7 +50,16 @@ public class ContentManager {
         return CompletableFuture.supplyAsync(() -> contentMapper.listPage(request));
     }
 
-    public Response listContent(ContentRequest request) {
+    /**
+     * 查询帖子
+     *
+     * @param request
+     * @return
+     */
+    public Response listContentPage(ContentRequest request) {
+        if (null == request) {
+            request = new ContentRequest();
+        }
         //查询帖子
         Page<ContentDO> contentDOPage = contentMapper.listPage(request);
         List<ContentDO> contentDOList = Optional.ofNullable(contentDOPage).flatMap(Page::getData).orElse(null);
@@ -85,16 +94,16 @@ public class ContentManager {
             }
             Map<Long, ActivityDO> activityDOMap = FutureUtils.get(activityFuture);
             Map<Long, UserInfoDO> userInfoDOMap = FutureUtils.get(userInfoFuture);
-
+            //设置组织、活动、发帖人
+            setOrgActivityAndUserInfo(contentResponseList, organizationDOMap, activityDOMap, userInfoDOMap);
         }
-        //发帖人
-        //活动
         return null;
     }
 
     public List<ContentResponse> setOrgActivityAndUserInfo(List<ContentResponse> contentResponseList,
                                                            Map<Long, OrganizationDO> organizationDOMap,
-                                                           Map<Long, ActivityDO> activityDOMap, Map<Long, UserInfoDO> userInfoDOMap) {
+                                                           Map<Long, ActivityDO> activityDOMap,
+                                                           Map<Long, UserInfoDO> userInfoDOMap) {
         if (CollectionUtils.isEmpty(contentResponseList)) {
             return contentResponseList;
         }

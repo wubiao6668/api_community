@@ -4,6 +4,7 @@
 
 package com.community.web.controller.api;
 
+import com.community.common.annotations.RequestJsonParam;
 import com.community.domain.core.Response;
 import com.community.domain.request.OrganizationRequest;
 import com.community.domain.response.OrganizationResponse;
@@ -14,12 +15,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/api/org")
+@RequestMapping("api.org")
 public class OrganizationApiController extends AbstractAction<OrganizationService, OrganizationManager> {
 
 
     @RequestMapping("detail")
-    public Response<OrganizationResponse> orgDetail(OrganizationRequest request) {
+    public Response<OrganizationResponse> orgDetail(@RequestJsonParam("request")OrganizationRequest request) {
         return manager.organizationDetail(request);
     }
 
