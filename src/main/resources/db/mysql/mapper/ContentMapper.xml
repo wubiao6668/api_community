@@ -3,14 +3,14 @@
 <mapper namespace="com.community.dao.mapper.ContentMapper">
 
     <sql id="columns">
-        id,user_id,title,content_json,latitude,longitude,type,biz_id,biz_child_id,status,top,img_num,comment_num,view_num,like_num,favorite_num,follow_num,tag_id,tag_extend,is_delete,create_user_id,create_time,update_user_id,update_time,sys_version
+        id,user_id,title,contents,latitude,longitude,type,biz_id,biz_child_id,status,top,img_num,comment_num,view_num,like_num,favorite_num,follow_num,tag_id,tag_extend,is_delete,create_user_id,create_time,update_user_id,update_time,sys_version
     </sql>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO content (
         user_id,
         title,
-        content_json,
+        contents,
         latitude,
         longitude,
         type,
@@ -35,7 +35,7 @@
         ) VALUES (
         #{userId},
         #{title},
-        #{contentJson},
+        #{contents},
         #{latitude},
         #{longitude},
         #{type},
@@ -68,8 +68,8 @@
         <if test="@Ognl@isNotEmpty(title)">
             title,
         </if>
-        <if test="@Ognl@isNotEmpty(contentJson)">
-            content_json,
+        <if test="@Ognl@isNotEmpty(contents)">
+            contents,
         </if>
         <if test="@Ognl@isNotEmpty(latitude)">
             latitude,
@@ -135,8 +135,8 @@
         <if test="@Ognl@isNotEmpty(title)">
             #{title},
         </if>
-        <if test="@Ognl@isNotEmpty(contentJson)">
-            #{contentJson},
+        <if test="@Ognl@isNotEmpty(contents)">
+            #{contents},
         </if>
         <if test="@Ognl@isNotEmpty(latitude)">
             #{latitude},
@@ -202,7 +202,7 @@
         UPDATE content SET
         user_id = #{userId},
         title = #{title},
-        content_json = #{contentJson},
+        contents = #{contents},
         latitude = #{latitude},
         longitude = #{longitude},
         type = #{type},
@@ -237,8 +237,8 @@
         <if test="null != title">
             title = #{title},
         </if>
-        <if test="null != contentJson">
-            content_json = #{contentJson},
+        <if test="null != contents">
+            contents = #{contents},
         </if>
         <if test="null != latitude">
             latitude = #{latitude},
@@ -312,8 +312,8 @@
         <if test="null != title">
             title = #{title},
         </if>
-        <if test="null != contentJson">
-            content_json = #{contentJson},
+        <if test="null != contents">
+            contents = #{contents},
         </if>
         <if test="null != latitude">
             latitude = #{latitude},
@@ -470,8 +470,8 @@
             <if test="title != null">
                 AND title = #{title}
             </if>
-            <if test="contentJson != null">
-                AND content_json = #{contentJson}
+            <if test="contents != null">
+                AND contents = #{contents}
             </if>
             <if test="latitude != null">
                 AND latitude = #{latitude}

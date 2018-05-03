@@ -1,9 +1,10 @@
 /**
- * Created by wubiao on - 2018/05/01.
+ * Created by wubiao on - 2018/05/02.
  */
 
 package com.community.domain.model.db;
 
+import com.community.domain.bo.ContentBO;
 import lombok.Data;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
@@ -29,7 +30,7 @@ public class ContentDO implements Serializable {
     /**
      * 内容
      */
-    private String contentJson;
+    private ContentBO[] contents;
     /**
      * 纬度
      */
