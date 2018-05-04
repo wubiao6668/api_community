@@ -22,4 +22,9 @@ public class ContentApiController extends AbstractAction<ContentService, Content
         return manager.listContentPage(request);
     }
 
+    @RequestMapping("detail")
+    public Response contentDetail(@RequestJsonParam("request") ContentRequest request) {
+        return manager.contentDetail(request);
+    }
+
 }

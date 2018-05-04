@@ -14,6 +14,10 @@ public class Constant {
      * 摘要最大数
      */
     public static final int MAX_SUMMARY_LENGTH = 160;
+    /**
+     * 公共活动
+     */
+    public static final Integer PUBLIC_ACTIVITY_ORG_ID = -1;
 
     public enum IsDeleteEnum {
         NO(0, "未删除"),

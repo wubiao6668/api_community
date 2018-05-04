@@ -44,6 +44,14 @@ public class ContentResponse extends ContentDO implements Serializable {
      * 发帖人
      */
     private UserInfoResponse userInfo;
+    /**
+     * 组织成员信息
+     */
+    private OrganizationMemberResponse organizationMember;
+    /**
+     * 问题
+     */
+    private ContentResponse questionContent;
 
     /**
      * createTime
