@@ -45,7 +45,7 @@ public class ActivityManager {
         return CompletableFuture.supplyAsync(() -> activityMapper.getByKeys(activityIdSets));
     }
 
-    public Response<ActivityResponse> detail(ActivityRequest request) {
+    public Response<ActivityResponse> activityDetail(ActivityRequest request) {
         if (null == request || null == request.getId()) {
             Response.fail("id 不能为空");
         }

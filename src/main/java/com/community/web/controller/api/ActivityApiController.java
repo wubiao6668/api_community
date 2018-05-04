@@ -18,12 +18,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("api.activity")
 public class ActivityApiController extends AbstractAction<ActivityService, ActivityManager> {
 
+    /**
+     * 活动列表
+     *
+     * @param request
+     * @return
+     */
     @RequestMapping("list")
     public Response<ActivityResponse> listPage(@RequestJsonParam("request") ActivityRequest request) {
         return service.listPage(request, ActivityResponse.class);
     }
 
-
+    /**
+     * 活动详情
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping("detail")
+    public Response<ActivityResponse> activityDetail(@RequestJsonParam("request") ActivityRequest request) {
+        return manager.activityDetail(request);
+    }
 
 
 }
