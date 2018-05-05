@@ -114,8 +114,6 @@ public class CommentManager {
                 commentResponse.setIsOwn(commentResponse.getUserId().equals(loginUserId));
             });
         }
-
-
         return Response.success(commentResponseList);
     }
 
