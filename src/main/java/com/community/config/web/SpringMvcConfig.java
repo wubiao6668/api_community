@@ -1,9 +1,9 @@
 package com.community.config.web;
 
-import com.community.common.util.BeanUtils;
 import com.community.common.web.resolver.RequestJsonParamMethodArgumentResolver;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -24,7 +24,7 @@ public class SpringMvcConfig extends WebMvcConfigurationSupport {
 
     @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
-        if (BeanUtils.isNotEmpty(converters)) {
+        if (CollectionUtils.isNotEmpty(converters)) {
             for (HttpMessageConverter messageConverter : converters) {
                 if (messageConverter instanceof MappingJackson2HttpMessageConverter) {
                     ObjectMapper objectMapper = ((MappingJackson2HttpMessageConverter) messageConverter).getObjectMapper();

@@ -6,6 +6,7 @@ package com.community.manager;
 
 import com.community.common.constant.Constant;
 import com.community.common.constant.ContentConstant;
+import com.community.common.enums.ApiHttpStatus;
 import com.community.common.util.BeanUtils;
 import com.community.common.util.ContentUtils;
 import com.community.common.util.FutureUtils;
@@ -48,7 +49,7 @@ public class OrganizationManager {
         //帖子详情
         OrganizationDO organizationDO = organizationMapper.getByKey(id);
         if (null == organizationDO) {
-            return Response.fail("组织不存在");
+            return Response.fail(ApiHttpStatus.NOT_FOUND.getCode(), "组织不存在");
         }
         Long orgId = organizationDO.getId();
         Long userId = LoginContext.getUserId();
@@ -89,14 +90,13 @@ public class OrganizationManager {
         //标签
         Page<TagDO> tagDOPage = FutureUtils.get(tagPageFuture);
         List<TagDO> tagDOList = Optional.ofNullable(tagDOPage).flatMap(Page::getData).orElse(null);
-
         //返回对象
         OrganizationResponse organizationResponse = BeanUtils.copyProperties(organizationDO, OrganizationResponse.class);
         //转化返回值
         List<ContentResponse> contentResponseList = BeanUtils.list2list(contentDOList, ContentResponse.class);
         ContentUtils.extractSummary(contentResponseList);
         List<ActivityResponse> activityResponseList = BeanUtils.list2list(activityDOList, ActivityResponse.class);
-        List<TagResponse> tagResponseList = BeanUtils.list2list(activityDOList, TagResponse.class);
+        List<TagResponse> tagResponseList = BeanUtils.list2list(tagDOList, TagResponse.class);
         OrganizationMemberResponse organizationMemberResponse = BeanUtils.copyProperties(organizationMemberDO, OrganizationMemberResponse.class);
         //设置相关返回值
         organizationResponse.setContentList(contentResponseList);

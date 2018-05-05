@@ -33,4 +33,5 @@ public class UserInfoManager {
         }
         return CompletableFuture.supplyAsync(() -> userInfoMapper.getByKeys(userIdSets));
     }
+
 }

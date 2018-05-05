@@ -15,6 +15,7 @@ import lombok.Data;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Data
 public class FollowInfoRequest extends FollowInfoDO implements PageAble, Serializable {
@@ -39,6 +40,11 @@ public class FollowInfoRequest extends FollowInfoDO implements PageAble, Seriali
     private PaginationAble pagination = new PaginationAble();
 
     private List<SortAble> sortList = Lists.newArrayList(new SortAble(Constant.SortFieldEnum.ID.getCode(), Constant.SortOrderEnum.DESC.getCode()));
+
+    /**
+     * 用户集合
+     */
+    private Set<Long> userIdSet;
 
     @Override
     public String toString() {

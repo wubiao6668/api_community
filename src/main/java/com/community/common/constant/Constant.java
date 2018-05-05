@@ -1,5 +1,7 @@
 package com.community.common.constant;
 
+import com.community.domain.model.db.UserInfoDO;
+
 public class Constant {
 
     /**
@@ -47,6 +49,12 @@ public class Constant {
         }
     }
 
+    public static UserInfoDO DEFAULT_USER_INFO = new UserInfoDO();
+
+    static {
+        DEFAULT_USER_INFO.setAvatar("ddddd");
+    }
+
     public enum ShowEnum {
         SHOW(0, "展示"),
         HIDE(-1, "隐藏"),;
@@ -54,6 +62,34 @@ public class Constant {
         private String desc;
 
         ShowEnum(Integer code, String desc) {
+            this.code = code;
+            this.desc = desc;
+        }
+
+        public Integer getCode() {
+            return code;
+        }
+
+        public void setCode(Integer code) {
+            this.code = code;
+        }
+
+        public String getDesc() {
+            return desc;
+        }
+
+        public void setDesc(String desc) {
+            this.desc = desc;
+        }
+    }
+
+    public enum LikeEnum {
+        LIKE(1, "点赞"),
+        CANCEL(-1, "取消点赞"),;
+        private Integer code;
+        private String desc;
+
+        LikeEnum(Integer code, String desc) {
             this.code = code;
             this.desc = desc;
         }

@@ -44,6 +44,13 @@ public class OrganizationMemberManager {
         return CompletableFuture.supplyAsync(() -> getOrgMember(request));
     }
 
+//    public Integer orgRole(OrganizationMemberRequest request){
+//        if (null == request.getUserId() || null ==request.getOrgId()){
+//            return null;
+//        }
+//        OrganizationMemberDO memberDO = this.getOrgMember(request);
+//        Optional.ofNullable(memberDO).map(OrganizationMemberDO::getRole);
+//    }
 
     public static void main(String[] args) {
         OrganizationMemberDO organizationMemberDO = null;

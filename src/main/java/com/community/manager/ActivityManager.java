@@ -4,6 +4,7 @@
 
 package com.community.manager;
 
+import com.community.common.enums.ApiHttpStatus;
 import com.community.common.util.BeanUtils;
 import com.community.dao.mapper.ActivityMapper;
 import com.community.dao.mapper.UserInfoMapper;
@@ -47,12 +48,12 @@ public class ActivityManager {
 
     public Response<ActivityResponse> activityDetail(ActivityRequest request) {
         if (null == request || null == request.getId()) {
-            Response.fail("id 不能为空");
+            Response.fail(ApiHttpStatus.ARGUMENT_ERROR.getCode(), "id 不能为空");
         }
         Long id = request.getId();
         ActivityDO activityDO = activityMapper.getByKey(id);
         if (null == activityDO || IsDeleteEnum.YES.equals(activityDO.getIsDelete())) {
-            Response.fail("活动不存在");
+            Response.fail(ApiHttpStatus.NOT_FOUND.getCode(), "活动不存在");
         }
         ActivityResponse activityResponse = BeanUtils.copyProperties(activityDO, ActivityResponse.class);
         //查询发起人

@@ -15,6 +15,22 @@ public class CommentResponse extends CommentDO implements Serializable {
     private static final long serialVersionUID = 5454155825314635342L;
 
     /**
+     * 是否点赞
+     */
+    private Boolean isLike;
+    /**
+     * 是否自己的
+     */
+    private Boolean isOwn;
+    /**
+     * 评论用户
+     */
+    private UserInfoResponse userInfo;
+    /**
+     * 评论用户圈子角色
+     */
+    private OrganizationMemberResponse organizationMember;
+    /**
      * 评论时间
      */
     private String commentTimeShow;

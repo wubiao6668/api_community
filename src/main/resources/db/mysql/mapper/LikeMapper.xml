@@ -283,4 +283,32 @@
         </where>
     </sql>
 
+    <select id="getByBizIdUserIdAndType" resultMap="LikeDO">
+        SELECT
+        <include refid="columns"/>
+        FROM like
+        WHERE
+        is_delete = 0
+        <choose>
+            <when test="bizId != null">
+                AND biz_id = #{bizId}
+            </when>
+            <otherwise>
+                AND biz_id IN
+                <foreach collection="bizIdSet" item="bizIdTemp" open="(" separator="," close=")">
+                    #{bizIdTemp}
+                </foreach>
+            </otherwise>
+        </choose>
+        <if test="type != null">
+            AND type = #{type}
+        </if>
+        <if test="userId != null">
+            AND user_id = #{userId}
+        </if>
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+    </select>
+
 </mapper>

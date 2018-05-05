@@ -299,4 +299,32 @@
         </where>
     </sql>
 
+    <select id="getByUserIdBizIdAndType" resultMap="FollowInfoDO">
+        SELECT
+        <include refid="columns"/>
+        FROM follow_info
+        WHERE
+        is_delete = 0
+        <choose>
+            <when test="userId != null">
+                AND user_id = #{userId}
+            </when>
+            <otherwise>
+                AND user_id IN
+                <foreach collection="userIdSet" item="userIdTemp" open="(" separator="," close=")">
+                    #{userIdTemp}
+                </foreach>
+            </otherwise>
+        </choose>
+        <if test="type != null">
+            AND type = #{type}
+        </if>
+        <if test="bizId != null">
+            AND biz_id = #{bizId}
+        </if>
+        <if test="status != null">
+            AND status = #{status}
+        </if>
+    </select>
+
 </mapper>
