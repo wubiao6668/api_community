@@ -6,6 +6,7 @@ package com.community.domain.response;
 
 import com.community.common.util.DateUtils;
 import com.community.domain.model.db.CommentDO;
+import com.community.domain.response.vo.CommentVO;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -13,6 +14,11 @@ import java.io.Serializable;
 @Data
 public class CommentResponse extends CommentDO implements Serializable {
     private static final long serialVersionUID = 5454155825314635342L;
+
+    /**
+     * 评论
+     */
+    private CommentVO comment;
 
     /**
      * 是否点赞

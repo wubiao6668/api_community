@@ -5,6 +5,10 @@ import com.community.domain.model.db.UserInfoDO;
 public class Constant {
 
     /**
+     * 默认数
+     */
+    public static final int DEFAULT_NUM = 6;
+    /**
      * 置顶默认数
      */
     public static final int TOP_DEFAULT_NUM = 6;

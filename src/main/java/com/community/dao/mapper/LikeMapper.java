@@ -16,6 +16,12 @@ import java.util.Map;
 @Mapper
 public interface LikeMapper extends CurdAble<Long, LikeRequest, LikeDO> {
 
+    /**
+     * 查询userId是否点赞了
+     *
+     * @param request
+     * @return
+     */
     @MapKey("user_id")
     Map<Long, LikeDO> getByBizIdUserIdAndType(LikeRequest request);
 }

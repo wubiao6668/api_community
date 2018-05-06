@@ -23,4 +23,9 @@ public class CommentApiController extends AbstractAction<CommentService, Comment
         return manager.listPageByBizId(commentRequest);
     }
 
+    @RequestMapping("detail")
+    public Response<CommentResponse> commentDetail(CommentRequest request) {
+        return manager.detail(request);
+    }
+
 }

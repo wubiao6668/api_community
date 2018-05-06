@@ -8,7 +8,9 @@ import com.community.common.enums.ApiHttpStatus;
 import com.community.common.util.BeanUtils;
 import com.community.common.util.FutureUtils;
 import com.community.dao.mapper.CommentMapper;
+import com.community.dao.mapper.UserInfoMapper;
 import com.community.domain.core.Page;
+import com.community.domain.core.PaginationAble;
 import com.community.domain.core.Response;
 import com.community.domain.model.db.CommentDO;
 import com.community.domain.model.db.LikeDO;
@@ -20,7 +22,10 @@ import com.community.domain.request.OrganizationMemberRequest;
 import com.community.domain.response.CommentResponse;
 import com.community.domain.response.OrganizationMemberResponse;
 import com.community.domain.response.UserInfoResponse;
+import com.community.domain.response.vo.CommentVO;
+import com.community.domain.response.vo.UserInfoVO;
 import com.community.domain.session.LoginContext;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.apache.commons.collections.CollectionUtils;
@@ -35,10 +40,10 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
 import static com.community.common.constant.Constant.*;
+import static java.util.stream.Collectors.toSet;
 
 @Service
 public class CommentManager {
-
     @Autowired
     private CommentMapper commentMapper;
     @Autowired
@@ -47,6 +52,8 @@ public class CommentManager {
     private LikeManager likeManager;
     @Autowired
     private OrganizationMemberManager organizationMemberManager;
+    @Autowired
+    private UserInfoMapper userInfoMapper;
 
     public Future<Page<CommentDO>> listPageAsync(CommentRequest request) {
         return CompletableFuture.supplyAsync(() -> commentMapper.listPage(request));
@@ -118,6 +125,68 @@ public class CommentManager {
         responsePage.setData(Optional.ofNullable(commentResponseList));
         responsePage.setPagination(Optional.ofNullable(commentDOPage).flatMap(page -> page.getPagination()));
         return Response.success(responsePage);
+    }
+
+    public Response<CommentResponse> detail(CommentRequest request) {
+        if (null == request || null == request.getId()) {
+            return Response.fail(ApiHttpStatus.ARGUMENT_ERROR.getCode(), "id 不能为空");
+        }
+        Long id = request.getId();
+        CommentDO commentDO = commentMapper.getByKey(id);
+        if (null == commentDO || IsDeleteEnum.YES.getCode().equals(commentDO.getIsDelete())) {
+            return Response.fail(ApiHttpStatus.NOT_FOUND.getCode(), "评论不存在");
+        }
+        CommentVO commentVO = BeanUtils.copyProperties(commentDO, CommentVO.class);
+        //当前用户id
+        Long loginUserId = LoginContext.getUserId();
+        Set<Long> userIdSet = Sets.newLinkedHashSet();
+        Future<Map<Long, LikeDO>> likeDOMapFuture = null;
+        if (null != loginUserId) {
+            //查询自己是否点赞了改评论
+            LikeRequest likeRequest = new LikeRequest();
+            likeRequest.setBizId(commentVO.getId());
+            likeRequest.setType(commentVO.getType());
+            likeRequest.setUserId(loginUserId);
+            likeRequest.setStatus(LikeEnum.LIKE.getCode());
+            likeDOMapFuture = likeManager.getByBizIdUserIdAndTypeAsync(likeRequest);
+        }
+        //查询点赞人
+        LikeRequest likeListRequest = new LikeRequest();
+        likeListRequest.setBizId(commentVO.getId());
+        likeListRequest.setType(commentVO.getType());
+        likeListRequest.setIsDelete(IsDeleteEnum.NO.getCode());
+        PaginationAble paginationAble = likeListRequest.getPagination();
+        if (null == paginationAble) {
+            paginationAble = new PaginationAble();
+        }
+        paginationAble.setPageSize(DEFAULT_NUM);
+        likeListRequest.setPagination(paginationAble);
+        Future<Page<LikeDO>> commentDOPageFuture = likeManager.listPageAsync(likeListRequest);
+        //取结果
+        Map<Long, LikeDO> likeDOMap = FutureUtils.get(likeDOMapFuture);
+        Page<LikeDO> likeDOPage = FutureUtils.get(commentDOPageFuture);
+        //当前用户是否点赞
+        Boolean isLoginUserLike = Optional.ofNullable(likeDOMap).map(a -> a.get(loginUserId)).
+                map(likeDO -> LikeEnum.LIKE.getCode().equals(likeDO.getStatus())).
+                orElse(false);
+        commentVO.setIsLike(isLoginUserLike);
+        //点赞用户
+        Set<Long> likeUserIdSet = Optional.ofNullable(likeDOPage).
+                flatMap(Page::getData).map(a -> a.stream()).
+                map(b -> b.map(likeDO -> likeDO.getUserId()).collect(toSet())).orElse(Sets.newLinkedHashSet());
+        userIdSet.addAll(likeUserIdSet);
+        //查询用户
+        Map<Long, UserInfoDO> userInfoDOMap = userInfoMapper.getByKeys(userIdSet);
+        List<UserInfoVO> likeUserInfoVOList = Lists.newArrayList();
+        likeUserIdSet.forEach(aLong -> {
+            UserInfoDO userInfoDO = Optional.ofNullable(userInfoDOMap).map(a -> a.get(aLong)).orElse(DEFAULT_USER_INFO);
+            likeUserInfoVOList.add(BeanUtils.copyProperties(userInfoDO, UserInfoVO.class));
+        });
+        commentVO.setLikeUserInfo(likeUserInfoVOList);
+        //返回对象
+        CommentResponse commentResponse = new CommentResponse();
+        commentResponse.setComment(commentVO);
+        return Response.success(commentResponse);
     }
 
     public static void main(String[] args) {
