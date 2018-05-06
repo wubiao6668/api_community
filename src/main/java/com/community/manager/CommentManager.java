@@ -52,7 +52,7 @@ public class CommentManager {
         return CompletableFuture.supplyAsync(() -> commentMapper.listPage(request));
     }
 
-    public Response<List<CommentResponse>> listPageByBizId(CommentRequest request) {
+    public Response<Page<CommentResponse>> listPageByBizId(CommentRequest request) {
         if (null != request.getBizId()) {
             return Response.fail(ApiHttpStatus.ARGUMENT_ERROR.getCode(), "id 不能为空");
         }
@@ -114,7 +114,10 @@ public class CommentManager {
                 commentResponse.setIsOwn(commentResponse.getUserId().equals(loginUserId));
             });
         }
-        return Response.success(commentResponseList);
+        Page<CommentResponse> responsePage = new Page<>();
+        responsePage.setData(Optional.ofNullable(commentResponseList));
+        responsePage.setPagination(Optional.ofNullable(commentDOPage).flatMap(page -> page.getPagination()));
+        return Response.success(responsePage);
     }
 
     public static void main(String[] args) {

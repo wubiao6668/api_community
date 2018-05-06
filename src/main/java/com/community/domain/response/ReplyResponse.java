@@ -4,49 +4,17 @@
 
 package com.community.domain.response;
 
-import com.community.common.util.DateUtils;
-import com.community.domain.model.db.ReplyDO;
+import com.community.domain.core.Page;
+import com.community.domain.response.vo.ReplyVO;
 import lombok.Data;
 
 import java.io.Serializable;
 
 @Data
-public class ReplyResponse extends ReplyDO implements Serializable {
+public class ReplyResponse implements Serializable {
     private static final long serialVersionUID = 5454155825314635342L;
 
-    /**
-     * 回复时间
-     */
-    private String replyTimeShow;
-    /**
-     * createTime
-     */
-    private String createTimeShow;
-    /**
-     * 修改时间
-     */
-    private String updateTimeShow;
-
-    /**
-     * 回复时间
-     */
-    public String getReplyTimeShow() {
-        return DateUtils.dateShow(getReplyTime());
-    }
-
-    /**
-     * createTime
-     */
-    public String getCreateTimeShow() {
-        return DateUtils.dateShow(getCreateTime());
-    }
-
-    /**
-     * 修改时间
-     */
-    public String getUpdateTimeShow() {
-        return DateUtils.dateShow(getUpdateTime());
-    }
+    private Page<ReplyVO> page;
 
     @Override
     public String toString() {
