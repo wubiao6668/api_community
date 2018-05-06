@@ -6,6 +6,7 @@ package com.community.manager;
 
 import com.community.common.constant.Constant;
 import com.community.common.constant.ContentConstant;
+import com.community.common.constant.OrganizationConstant.StatusEnum;
 import com.community.common.enums.ApiHttpStatus;
 import com.community.common.util.BeanUtils;
 import com.community.common.util.ContentUtils;
@@ -17,6 +18,7 @@ import com.community.domain.core.Response;
 import com.community.domain.model.db.*;
 import com.community.domain.request.*;
 import com.community.domain.response.*;
+import com.community.domain.response.vo.OrganizationVO;
 import com.community.domain.session.LoginContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,8 +47,11 @@ public class OrganizationManager {
     }
 
     public Response<OrganizationResponse> organizationDetail(OrganizationRequest request) {
+        if (null == request || null == request.getId()) {
+            return Response.fail(ApiHttpStatus.ARGUMENT_ERROR.getCode(), "id 不能为空");
+        }
         Long id = request.getId();
-        //帖子详情
+        //组织详情
         OrganizationDO organizationDO = organizationMapper.getByKey(id);
         if (null == organizationDO) {
             return Response.fail(ApiHttpStatus.NOT_FOUND.getCode(), "组织不存在");
@@ -103,6 +108,42 @@ public class OrganizationManager {
         organizationResponse.setActivityList(activityResponseList);
         organizationResponse.setTagList(tagResponseList);
         organizationResponse.setOrganizationMember(organizationMemberResponse);
+        return Response.success(organizationResponse);
+    }
+
+    public Response<OrganizationResponse> organizationIntroduce(OrganizationRequest request) {
+        if (null == request || null == request.getId()) {
+            return Response.fail(ApiHttpStatus.ARGUMENT_ERROR.getCode(), "id 不能为空");
+        }
+        Long id = request.getId();
+        //组织详情
+        OrganizationDO organizationDO = organizationMapper.getByKey(id);
+        if (null == organizationDO) {
+            return Response.fail(ApiHttpStatus.NOT_FOUND.getCode(), "组织不存在");
+        }
+        OrganizationVO organizationVO = BeanUtils.copyProperties(organizationDO, OrganizationVO.class);
+        //预览成员
+        OrganizationMemberRequest organizationMemberRequest = new OrganizationMemberRequest();
+        organizationMemberRequest.setOrgId(id);
+        organizationMemberRequest.setStatus(StatusEnum.FOLLOW.getCode());
+        organizationMemberRequest.getPagination().setPageSize(Constant.DEFAULT_NUM);
+        organizationMemberRequest.setRole(Constant.RoleEnum.ORDINARY.getCode());
+        Future<OrganizationMemberDO> ordinaryMemberDOFuture = organizationMemberManager.getOrgMemberAsync(organizationMemberRequest);
+        //当前登录人是否关注圈子
+        Long loginUserId = LoginContext.getUserId();
+        if (null == loginUserId) {
+            OrganizationMemberRequest organizationFollowRequest = new OrganizationMemberRequest();
+            organizationFollowRequest.setOrgId(id);
+            organizationFollowRequest.setUserId(loginUserId);
+            organizationFollowRequest.setStatus(StatusEnum.FOLLOW.getCode());
+            OrganizationMemberDO organizationMemberDO = organizationMemberManager.getOrgMember(organizationFollowRequest);
+            if (null != organizationMemberDO) {
+                organizationVO.setRole(organizationMemberDO.getRole());
+                organizationVO.setIsFollow(true);
+            }
+        }
+        OrganizationResponse organizationResponse = new OrganizationResponse();
+        organizationResponse.setOrganization(organizationVO);
         return Response.success(organizationResponse);
     }
 

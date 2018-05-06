@@ -20,8 +20,13 @@ public class OrganizationApiController extends AbstractAction<OrganizationServic
 
 
     @RequestMapping("detail")
-    public Response<OrganizationResponse> orgDetail(@RequestJsonParam("request")OrganizationRequest request) {
+    public Response<OrganizationResponse> orgDetail(@RequestJsonParam("request") OrganizationRequest request) {
         return manager.organizationDetail(request);
+    }
+
+    @RequestMapping("introduce")
+    public Response<OrganizationResponse> orgIntroduce(@RequestJsonParam("request") OrganizationRequest request) {
+        return manager.organizationIntroduce(request);
     }
 
 }

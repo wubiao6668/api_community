@@ -15,10 +15,13 @@ import lombok.Data;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Data
 public class OrganizationMemberRequest extends OrganizationMemberDO implements PageAble, Serializable {
     private static final long serialVersionUID = 3148176768559230877L;
+
+    private Set<Integer> roleSet;
 
     /**
      * 最后申请时间

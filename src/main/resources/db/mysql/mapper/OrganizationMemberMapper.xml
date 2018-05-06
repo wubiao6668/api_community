@@ -368,6 +368,12 @@
             <if test="sysVersion != null">
                 AND sys_version = #{sysVersion}
             </if>
+            <if test="@Ognl@isNotEmpty(roleSet)">
+                AND role IN
+                <foreach collection="roleSet" item="roleTemp" open="(" separator="," close=")">
+                    #{roleTemp}
+                </foreach>
+            </if>
         </where>
     </sql>
 
