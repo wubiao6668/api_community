@@ -5,15 +5,19 @@
 package com.community.domain.response;
 
 import com.community.common.util.DateUtils;
+import com.community.domain.core.Page;
 import com.community.domain.model.db.OrganizationMemberDO;
+import com.community.domain.response.vo.OrganizationMemberVO;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 public class OrganizationMemberResponse extends OrganizationMemberDO implements Serializable {
     private static final long serialVersionUID = 5454155825314635342L;
 
+    private Page<List<OrganizationMemberVO>> orgMemberListPage;
     /**
      * 最后申请时间
      */
