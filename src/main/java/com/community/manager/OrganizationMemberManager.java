@@ -10,9 +10,11 @@ import com.community.dao.mapper.OrganizationMemberMapper;
 import com.community.dao.mapper.UserInfoMapper;
 import com.community.domain.core.Page;
 import com.community.domain.core.Pagination;
+import com.community.domain.core.Response;
 import com.community.domain.model.db.OrganizationMemberDO;
 import com.community.domain.model.db.UserInfoDO;
 import com.community.domain.request.OrganizationMemberRequest;
+import com.community.domain.response.OrganizationMemberResponse;
 import com.community.domain.response.vo.OrganizationMemberVO;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,12 +36,11 @@ public class OrganizationMemberManager {
     @Autowired
     private UserInfoMapper userInfoMapper;
 
-    public Page<List<OrganizationMemberVO>> listPage(OrganizationMemberRequest request) {
+    public Response<OrganizationMemberResponse> listPage(OrganizationMemberRequest request) {
         Page<OrganizationMemberDO> organizationMemberDOPage = organizationMemberMapper.listPage(request);
         List<OrganizationMemberDO> memberDOList = Optional.ofNullable(organizationMemberDOPage).flatMap(Page::getData).orElse(null);
-        Optional<Pagination> paginationOptional = Optional.ofNullable(organizationMemberDOPage).map(Page::getPagination).orElse(Optional.empty());
-        //返回值
-        Page<List<OrganizationMemberVO>> organizationMemberVOPage = new Page<>();
+        Pagination pagination = Optional.ofNullable(organizationMemberDOPage).flatMap(Page::getPagination).orElse(null);
+        Boolean hadMore = Optional.ofNullable(organizationMemberDOPage).map(Page::getHasMore).orElse(null);
         //设置用户
         List<OrganizationMemberVO> memberVOList = null;
         if (CollectionUtils.isNotEmpty(memberDOList)) {
@@ -50,15 +51,17 @@ public class OrganizationMemberManager {
             memberVOList.forEach(memberVO -> {
                 memberVO.setUserInfo(UserUtils.getUserInfoVO(userInfoDOMap, memberVO.getUserId()));
             });
-            Optional memberVOListOptional = Optional.ofNullable(memberVOList);
-            organizationMemberVOPage.setData(memberVOListOptional);
         }
-        organizationMemberVOPage.setPagination(paginationOptional);
-        return organizationMemberVOPage;
+        //返回结果
+        OrganizationMemberResponse organizationMemberResponse = new OrganizationMemberResponse();
+        organizationMemberResponse.setOrgMemberList(memberVOList);
+        organizationMemberResponse.setPagination(pagination);
+        organizationMemberResponse.setHasMore(hadMore);
+        return Response.success(organizationMemberResponse);
     }
 
-    public Future<Page<OrganizationMemberDO>> listPageAsync(OrganizationMemberRequest request) {
-        return CompletableFuture.supplyAsync(() -> organizationMemberMapper.listPage(request));
+    public Future<Response<OrganizationMemberResponse>> listPageAsync(OrganizationMemberRequest request) {
+        return CompletableFuture.supplyAsync(() -> this.listPage(request));
     }
 
     public OrganizationMemberDO getOrgMember(OrganizationMemberRequest request) {
@@ -73,7 +76,6 @@ public class OrganizationMemberManager {
         }
         return organizationMemberDO;
     }
-
 
     public Future<OrganizationMemberDO> getOrgMemberAsync(OrganizationMemberRequest request) {
         return CompletableFuture.supplyAsync(() -> getOrgMember(request));

@@ -7,6 +7,7 @@ package com.community.web.controller.api;
 import com.community.common.annotations.RequestJsonParam;
 import com.community.domain.core.Response;
 import com.community.domain.request.ContentRequest;
+import com.community.domain.response.ContentResponse;
 import com.community.manager.ContentManager;
 import com.community.service.ContentService;
 import com.community.web.core.AbstractAction;
@@ -18,13 +19,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ContentApiController extends AbstractAction<ContentService, ContentManager> {
 
     @RequestMapping("list.page")
-    public Response listContentPage(@RequestJsonParam("request") ContentRequest request) {
+    public Response<ContentResponse> listContentPage(@RequestJsonParam("request") ContentRequest request) {
         return manager.listContentPage(request);
     }
 
     @RequestMapping("detail")
-    public Response contentDetail(@RequestJsonParam("request") ContentRequest request) {
+    public Response<ContentResponse> contentDetail(@RequestJsonParam("request") ContentRequest request) {
         return manager.contentDetail(request);
     }
+
 
 }

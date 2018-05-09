@@ -13,11 +13,13 @@ import com.community.dao.mapper.ContentMapper;
 import com.community.dao.mapper.OrganizationMapper;
 import com.community.dao.mapper.UserInfoMapper;
 import com.community.domain.core.Page;
+import com.community.domain.core.Pagination;
 import com.community.domain.core.Response;
 import com.community.domain.model.db.*;
 import com.community.domain.request.ContentRequest;
 import com.community.domain.request.OrganizationMemberRequest;
-import com.community.domain.response.*;
+import com.community.domain.response.ContentResponse;
+import com.community.domain.response.vo.*;
 import com.community.domain.session.LoginContext;
 import com.google.common.collect.Sets;
 import org.apache.commons.collections.CollectionUtils;
@@ -62,33 +64,36 @@ public class ContentManager {
      * @param request
      * @return
      */
-    public Response<List<ContentResponse>> listContentPage(ContentRequest request) {
+    public Response<ContentResponse> listContentPage(ContentRequest request) {
         if (null == request) {
             request = new ContentRequest();
         }
+        ContentResponse contentResponse = new ContentResponse();
         //查询帖子
         Page<ContentDO> contentDOPage = contentMapper.listPage(request);
         List<ContentDO> contentDOList = Optional.ofNullable(contentDOPage).flatMap(Page::getData).orElse(null);
-        List<ContentResponse> contentResponseList = null;
+        Pagination pagination = Optional.ofNullable(contentDOPage).flatMap(Page::getPagination).orElse(null);
+        Boolean hasMore = Optional.ofNullable(contentDOPage).map(Page::getHasMore).orElse(null);
+        List<ContentVO> contentVOList = null;
         if (CollectionUtils.isNotEmpty(contentDOList)) {
-            contentResponseList = BeanUtils.list2list(contentDOList, ContentResponse.class);
+            contentVOList = BeanUtils.list2list(contentDOList, ContentVO.class);
             //组织id
             Set<Long> orgIdSet = Sets.newHashSet();
             //活动id
             Set<Long> activityIdSet = Sets.newHashSet();
             //发帖人id
             Set<Long> userIdSet = Sets.newHashSet();
-            contentResponseList.forEach(contentResponse -> {
+            contentVOList.forEach(contentVO -> {
                 //组织
-                if (TypeEnum.ORG.getCode().equals(contentResponse.getType()) || TypeEnum.ACTIVITY.getCode().equals(contentResponse.getType())) {
-                    orgIdSet.add(contentResponse.getBizId());
+                if (TypeEnum.ORG.getCode().equals(contentVO.getType()) || TypeEnum.ACTIVITY.getCode().equals(contentVO.getType())) {
+                    orgIdSet.add(contentVO.getBizId());
                 }
                 //活动
-                if (TypeEnum.ACTIVITY.getCode().equals(contentResponse.getType())) {
-                    activityIdSet.add(contentResponse.getBizChildId());
+                if (TypeEnum.ACTIVITY.getCode().equals(contentVO.getType())) {
+                    activityIdSet.add(contentVO.getBizChildId());
                 }
                 //发帖人id
-                userIdSet.add(contentResponse.getUserId());
+                userIdSet.add(contentVO.getUserId());
             });
             //查询活动
             Future<Map<Long, ActivityDO>> activityFuture = activityManager.getActivityByIdsAsync(activityIdSet);
@@ -102,12 +107,15 @@ public class ContentManager {
             Map<Long, ActivityDO> activityDOMap = FutureUtils.get(activityFuture);
             Map<Long, UserInfoDO> userInfoDOMap = FutureUtils.get(userInfoFuture);
             //设置组织、活动、发帖人
-            ContentConvert.setOrgActivityAndUserInfo(contentResponseList, organizationDOMap, activityDOMap, userInfoDOMap);
+            ContentConvert.setOrgActivityAndUserInfo(contentVOList, organizationDOMap, activityDOMap, userInfoDOMap);
         }
-        return Response.success(contentResponseList);
+        contentResponse.setContentList(contentVOList);
+        contentResponse.setPagination(pagination);
+        contentResponse.setHasMore(hasMore);
+        return Response.success(contentResponse);
     }
 
-    public ContentResponse contentById(Long id) {
+    public ContentVO contentById(Long id) {
         if (null == id) {
             return null;
         }
@@ -115,48 +123,52 @@ public class ContentManager {
         if (null == contentDO || IsDeleteEnum.YES.getCode().equals(contentDO.getStatus())) {
             return null;
         }
-        ContentResponse contentResponse = BeanUtils.copyProperties(contentDO, ContentResponse.class);
+        ContentVO contentVO = BeanUtils.copyProperties(contentDO, ContentVO.class);
         //查找发布者
-        UserInfoDO userInfoDO = userInfoMapper.getByKey(contentResponse.getId());
-        UserInfoResponse userInfoResponse = BeanUtils.copyProperties(userInfoDO, UserInfoResponse.class);
-        contentResponse.setUserInfo(userInfoResponse);
-        return contentResponse;
+        UserInfoVO userInfoVO = userInfoManager.getUserByIdIfNotExistReturnDefault(contentDO.getUserId());
+        contentVO.setUserInfo(userInfoVO);
+        return contentVO;
     }
 
     public Response<ContentResponse> contentDetail(ContentRequest contentRequest) {
-        ContentResponse contentResponse = null;
-        if (null == contentRequest || null == contentRequest.getId() || null == (this.contentById(contentRequest.getId()))) {
+        ContentResponse contentResponse = new ContentResponse();
+        if (null == contentRequest || null == contentRequest.getId()) {
             return Response.fail(ApiHttpStatus.ARGUMENT_ERROR.getCode(), "id不能为空");
         }
-        Long bizId = contentResponse.getBizId();
-        Long bizChildId = contentResponse.getBizChildId();
+        ContentVO contentVO = this.contentById(contentRequest.getId());
+        if (null == contentVO) {
+            return Response.fail(ApiHttpStatus.NOT_FOUND.getCode(), "内容已被删除");
+        }
+        Long bizId = contentVO.getBizId();
+        Long bizChildId = contentVO.getBizChildId();
         //组织、活动
-        if (TypeEnum.ORG.getCode().equals(contentResponse.getType()) || TypeEnum.ACTIVITY.getCode().equals(contentResponse.getType())) {
+        if (TypeEnum.ORG.getCode().equals(contentVO.getType()) || TypeEnum.ACTIVITY.getCode().equals(contentVO.getType())) {
             //公共活动没有组织
             if (!PUBLIC_ACTIVITY_ORG_ID.equals(bizId)) {
                 OrganizationDO organizationDO = organizationMapper.getByKey(bizId);
-                OrganizationResponse organizationResponse = BeanUtils.copyProperties(organizationDO, OrganizationResponse.class);
-                contentResponse.setOrganization(organizationResponse);
+                OrganizationVO organizationVO = BeanUtils.copyProperties(organizationDO, OrganizationVO.class);
+                contentVO.setOrganization(organizationVO);
                 //查询圈子身份
                 OrganizationMemberRequest memberRequest = new OrganizationMemberRequest();
                 memberRequest.setUserId(LoginContext.getUserId());
                 memberRequest.setOrgId(bizId);
                 OrganizationMemberDO organizationMemberDO = organizationMemberManager.getOrgMember(memberRequest);
-                OrganizationMemberResponse organizationMemberResponse = BeanUtils.copyProperties(organizationMemberDO, OrganizationMemberResponse.class);
-                contentResponse.setOrganizationMember(organizationMemberResponse);
+                OrganizationMemberVO organizationMemberVO = BeanUtils.copyProperties(organizationMemberDO, OrganizationMemberVO.class);
+                contentVO.setOrganizationMember(organizationMemberVO);
             }
             //活动
-            if (TypeEnum.ACTIVITY.getCode().equals(contentResponse.getType())) {
+            if (TypeEnum.ACTIVITY.getCode().equals(contentVO.getType())) {
                 ActivityDO activityDO = activityMapper.getByKey(bizChildId);
-                ActivityResponse activityResponse = BeanUtils.copyProperties(activityDO, ActivityResponse.class);
-                contentResponse.setActivity(activityResponse);
+                ActivityVO activityVO = BeanUtils.copyProperties(activityDO, ActivityVO.class);
+                contentVO.setActivity(activityVO);
             }
             //回答
-        } else if (TypeEnum.ANSWER.getCode().equals(contentResponse.getType())) {
+        } else if (TypeEnum.ANSWER.getCode().equals(contentVO.getType())) {
             //查询问题
-            ContentResponse questionContentResponse = contentById(bizId);
-            contentResponse.setQuestionContent(questionContentResponse);
+            ContentVO questionContentVO = this.contentById(bizId);
+            contentVO.setQuestionContent(questionContentVO);
         }
+        contentResponse.setContent(contentVO);
         return Response.success(contentResponse);
     }
 

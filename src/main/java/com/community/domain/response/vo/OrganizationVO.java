@@ -3,6 +3,7 @@ package com.community.domain.response.vo;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 public class OrganizationVO implements Serializable {
@@ -82,5 +83,30 @@ public class OrganizationVO implements Serializable {
      */
     private Integer role;
 
+    private OrganizationVO organization;
 
+    /**
+     * createTime
+     */
+    private String createTimeShow;
+    /**
+     * 修改时间
+     */
+    private String updateTimeShow;
+    /**
+     * 帖子
+     */
+    private List<ContentVO> contentList;
+    /**
+     * 活动
+     */
+    private List<ActivityVO> activityList;
+    /**
+     * 标签
+     */
+    private List<TagVO> tagList;
+    /**
+     * 预览成员
+     */
+    private List<OrganizationMemberVO> preViewMemberList;
 }

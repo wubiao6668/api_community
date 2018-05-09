@@ -17,8 +17,9 @@ import com.community.domain.core.PaginationAble;
 import com.community.domain.core.Response;
 import com.community.domain.model.db.*;
 import com.community.domain.request.*;
-import com.community.domain.response.*;
-import com.community.domain.response.vo.OrganizationVO;
+import com.community.domain.response.OrganizationMemberResponse;
+import com.community.domain.response.OrganizationResponse;
+import com.community.domain.response.vo.*;
 import com.community.domain.session.LoginContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,6 +47,12 @@ public class OrganizationManager {
         return CompletableFuture.supplyAsync(() -> organizationMapper.listPage(request));
     }
 
+    /**
+     * 组织详情页
+     *
+     * @param request
+     * @return
+     */
     public Response<OrganizationResponse> organizationDetail(OrganizationRequest request) {
         if (null == request || null == request.getId()) {
             return Response.fail(ApiHttpStatus.ARGUMENT_ERROR.getCode(), "id 不能为空");
@@ -78,13 +85,14 @@ public class OrganizationManager {
         tagRequest.setIsShow(Constant.ShowEnum.SHOW.getCode());
         Future<Page<TagDO>> tagPageFuture = tagManager.listPageAsync(tagRequest);
         //当前人角色
-        OrganizationMemberDO organizationMemberDO = null;
+        Integer role = null;
         if (LoginContext.isLogin()) {
             OrganizationMemberRequest memberRequest = new OrganizationMemberRequest();
             memberRequest.setOrgId(orgId);
             memberRequest.setUserId(userId);
             Future<OrganizationMemberDO> organizationMemberDOFuture = organizationMemberManager.getOrgMemberAsync(memberRequest);
-            organizationMemberDO = FutureUtils.get(organizationMemberDOFuture);
+            OrganizationMemberDO organizationMemberDO = FutureUtils.get(organizationMemberDOFuture);
+            role = Optional.ofNullable(organizationMemberDO).map(a -> a.getRole()).orElse(null);
         }
         //置顶帖子
         Page<ContentDO> contentDOPage = FutureUtils.get(contentPageFuture);
@@ -96,21 +104,27 @@ public class OrganizationManager {
         Page<TagDO> tagDOPage = FutureUtils.get(tagPageFuture);
         List<TagDO> tagDOList = Optional.ofNullable(tagDOPage).flatMap(Page::getData).orElse(null);
         //返回对象
-        OrganizationResponse organizationResponse = BeanUtils.copyProperties(organizationDO, OrganizationResponse.class);
+        OrganizationResponse organizationResponse = new OrganizationResponse();
         //转化返回值
-        List<ContentResponse> contentResponseList = BeanUtils.list2list(contentDOList, ContentResponse.class);
-        ContentUtils.extractSummary(contentResponseList);
-        List<ActivityResponse> activityResponseList = BeanUtils.list2list(activityDOList, ActivityResponse.class);
-        List<TagResponse> tagResponseList = BeanUtils.list2list(tagDOList, TagResponse.class);
-        OrganizationMemberResponse organizationMemberResponse = BeanUtils.copyProperties(organizationMemberDO, OrganizationMemberResponse.class);
+        List<ContentVO> contentVOList = BeanUtils.list2list(contentDOList, ContentVO.class);
+        ContentUtils.extractSummary(contentVOList);
+        List<ActivityVO> activityVOList = BeanUtils.list2list(activityDOList, ActivityVO.class);
+        List<TagVO> tagVOList = BeanUtils.list2list(tagDOList, TagVO.class);
+        OrganizationVO organizationVO = BeanUtils.copyProperties(organizationDO, OrganizationVO.class);
         //设置相关返回值
-        organizationResponse.setContentList(contentResponseList);
-        organizationResponse.setActivityList(activityResponseList);
-        organizationResponse.setTagList(tagResponseList);
-        organizationResponse.setOrganizationMember(organizationMemberResponse);
+        organizationVO.setContentList(contentVOList);
+        organizationVO.setActivityList(activityVOList);
+        organizationVO.setTagList(tagVOList);
+        organizationVO.setRole(role);
         return Response.success(organizationResponse);
     }
 
+    /**
+     * 组织介绍
+     *
+     * @param request
+     * @return
+     */
     public Response<OrganizationResponse> organizationIntroduce(OrganizationRequest request) {
         if (null == request || null == request.getId()) {
             return Response.fail(ApiHttpStatus.ARGUMENT_ERROR.getCode(), "id 不能为空");
@@ -127,8 +141,11 @@ public class OrganizationManager {
         organizationMemberRequest.setOrgId(id);
         organizationMemberRequest.setStatus(StatusEnum.FOLLOW.getCode());
         organizationMemberRequest.getPagination().setPageSize(Constant.DEFAULT_NUM);
+        //只看普通的成员
         organizationMemberRequest.setRole(Constant.RoleEnum.ORDINARY.getCode());
-        Future<OrganizationMemberDO> ordinaryMemberDOFuture = organizationMemberManager.getOrgMemberAsync(organizationMemberRequest);
+        Response<OrganizationMemberResponse> ordinaryMemberResponse = organizationMemberManager.listPage(organizationMemberRequest);
+        List<OrganizationMemberVO> orgMemberList = Optional.ofNullable(ordinaryMemberResponse).map(a -> a.getData()).map(b -> b.getOrgMemberList()).orElse(null);
+        organizationVO.setPreViewMemberList(orgMemberList);
         //当前登录人是否关注圈子
         Long loginUserId = LoginContext.getUserId();
         if (null == loginUserId) {
@@ -142,6 +159,7 @@ public class OrganizationManager {
                 organizationVO.setIsFollow(true);
             }
         }
+        //返回结果
         OrganizationResponse organizationResponse = new OrganizationResponse();
         organizationResponse.setOrganization(organizationVO);
         return Response.success(organizationResponse);

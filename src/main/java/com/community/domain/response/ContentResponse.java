@@ -4,68 +4,26 @@
 
 package com.community.domain.response;
 
-import com.community.common.util.DateUtils;
-import com.community.domain.bo.ContentBO;
-import com.community.domain.model.db.ContentDO;
+import com.community.domain.core.Pagination;
+import com.community.domain.response.vo.ContentVO;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
 
 @Data
-public class ContentResponse extends ContentDO implements Serializable {
+public class ContentResponse implements Serializable {
     private static final long serialVersionUID = 5454155825314635342L;
-
     /**
-     * createTime
+     * 内容
      */
-    private String createTimeShow;
-    /**
-     * 修改时间
-     */
-    private String updateTimeShow;
-    /**
-     * 摘要
-     */
-    private String summary;
-    /**
-     * contentJson 转成 对象
-     */
-    private List<ContentBO> contentList;
-    /**
-     * 组织
-     */
-    private OrganizationResponse organization;
-    /**
-     * 活动
-     */
-    private ActivityResponse activity;
-    /**
-     * 发帖人
-     */
-    private UserInfoResponse userInfo;
-    /**
-     * 组织成员信息
-     */
-    private OrganizationMemberResponse organizationMember;
-    /**
-     * 问题
-     */
-    private ContentResponse questionContent;
-
-    /**
-     * createTime
-     */
-    public String getCreateTimeShow() {
-        return DateUtils.dateShow(getCreateTime());
-    }
-
-    /**
-     * 修改时间
-     */
-    public String getUpdateTimeShow() {
-        return DateUtils.dateShow(getUpdateTime());
-    }
+    private ContentVO content;
+    // 结果列表
+    private List<ContentVO> contentList;
+    //是否还有更多
+    private Boolean hasMore;
+    // 分页
+    private Pagination pagination;
 
     @Override
     public String toString() {

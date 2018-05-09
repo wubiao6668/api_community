@@ -3,6 +3,7 @@ package com.community.common.util;
 import com.community.common.constant.Constant;
 import com.community.domain.bo.ContentBO;
 import com.community.domain.response.ContentResponse;
+import com.community.domain.response.vo.ContentVO;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 
@@ -15,12 +16,12 @@ public class ContentUtils {
     /**
      * 设置摘要
      *
-     * @param contentResponse
+     * @param contentVO
      * @return
      */
-    public static String extractSummary(ContentResponse contentResponse) {
+    public static String extractSummary(ContentVO contentVO) {
         StringBuilder summarySb = new StringBuilder();
-        ContentBO[] contentBOs = contentResponse.getContents();
+        ContentBO[] contentBOs = contentVO.getContents();
         if (ArrayUtils.isNotEmpty(contentBOs)) {
             for (ContentBO contentBOTemp : contentBOs) {
                 //计算摘要
@@ -41,16 +42,16 @@ public class ContentUtils {
     /**
      * 设置摘要
      *
-     * @param contentResponseList
+     * @param contentVOList
      * @return
      */
-    public static void extractSummary(List<ContentResponse> contentResponseList) {
-        if (CollectionUtils.isEmpty(contentResponseList)) {
+    public static void extractSummary(List<ContentVO> contentVOList) {
+        if (CollectionUtils.isEmpty(contentVOList)) {
             return;
         }
-        contentResponseList.forEach(contentResponse -> {
+        contentVOList.forEach(contentVO -> {
             //设置摘要
-            contentResponse.setSummary(extractSummary(contentResponse));
+            contentVO.setSummary(extractSummary(contentVO));
         });
     }
 

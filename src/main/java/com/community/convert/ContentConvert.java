@@ -2,50 +2,44 @@ package com.community.convert;
 
 import com.community.common.constant.Constant;
 import com.community.common.util.BeanUtils;
+import com.community.common.util.UserUtils;
 import com.community.domain.model.db.ActivityDO;
 import com.community.domain.model.db.OrganizationDO;
 import com.community.domain.model.db.UserInfoDO;
-import com.community.domain.response.ActivityResponse;
-import com.community.domain.response.ContentResponse;
-import com.community.domain.response.OrganizationResponse;
-import com.community.domain.response.UserInfoResponse;
+import com.community.domain.response.vo.ActivityVO;
+import com.community.domain.response.vo.ContentVO;
+import com.community.domain.response.vo.OrganizationVO;
+import com.community.domain.response.vo.UserInfoVO;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class ContentConvert {
 
-    public static void setOrgActivityAndUserInfo(List<ContentResponse> contentResponseList,
+    public static void setOrgActivityAndUserInfo(List<ContentVO> contentVOList,
                                                  Map<Long, OrganizationDO> organizationDOMap,
                                                  Map<Long, ActivityDO> activityDOMap,
                                                  Map<Long, UserInfoDO> userInfoDOMap) {
-        if (CollectionUtils.isEmpty(contentResponseList)) {
+        if (CollectionUtils.isEmpty(contentVOList)) {
             return;
         }
-
-        contentResponseList.forEach(contentResponse -> {
+        contentVOList.forEach(contentVO -> {
             //发帖人id
-            UserInfoDO userInfoDO = null != userInfoDOMap && null != (userInfoDO = userInfoDOMap.get(contentResponse.getUserId())) ? userInfoDO : null;
-            if (null != userInfoDO) {
-                UserInfoResponse userInfoResponse = BeanUtils.copyProperties(userInfoDO, UserInfoResponse.class);
-                contentResponse.setUserInfo(userInfoResponse);
-            }
+            UserInfoVO userInfoVO = UserUtils.getUserInfoVO(userInfoDOMap, contentVO.getUserId());
+            contentVO.setUserInfo(userInfoVO);
             //组织
-            if (Constant.TypeEnum.ORG.getCode().equals(contentResponse.getType()) || Constant.TypeEnum.ACTIVITY.getCode().equals(contentResponse.getType())) {
-                OrganizationDO organizationDO = null != organizationDOMap && null != (organizationDO = organizationDOMap.get(contentResponse.getBizId())) ? organizationDO : null;
-                if (null != organizationDO) {
-                    OrganizationResponse organizationResponse = BeanUtils.copyProperties(organizationDO, OrganizationResponse.class);
-                    contentResponse.setOrganization(organizationResponse);
-                }
+            if (Constant.TypeEnum.ORG.getCode().equals(contentVO.getType()) || Constant.TypeEnum.ACTIVITY.getCode().equals(contentVO.getType())) {
+                OrganizationDO organizationDO = Optional.ofNullable(organizationDOMap).map(a -> a.get(contentVO.getBizId())).orElse(null);
+                OrganizationVO organizationVO = BeanUtils.copyProperties(organizationDO, OrganizationVO.class);
+                contentVO.setOrganization(organizationVO);
             }
             //活动
-            if (Constant.TypeEnum.ACTIVITY.getCode().equals(contentResponse.getType())) {
-                ActivityDO activityDO = null != activityDOMap && null != (activityDO = activityDOMap.get(contentResponse.getBizId())) ? activityDO : null;
-                if (null != activityDO) {
-                    ActivityResponse activityResponse = BeanUtils.copyProperties(activityDO, ActivityResponse.class);
-                    contentResponse.setActivity(activityResponse);
-                }
+            if (Constant.TypeEnum.ACTIVITY.getCode().equals(contentVO.getType())) {
+                ActivityDO activityDO = Optional.ofNullable(activityDOMap).map(a -> a.get(contentVO.getBizId())).orElse(null);
+                ActivityVO activityVO = BeanUtils.copyProperties(activityDO, ActivityVO.class);
+                contentVO.setActivity(activityVO);
             }
         });
         return;

@@ -19,9 +19,7 @@ public class OrganizationMemberApiController extends AbstractAction<Organization
 
     @RequestMapping("list")
     public Response<OrganizationMemberResponse> orgMemberList(OrganizationMemberRequest request) {
-        OrganizationMemberResponse organizationMemberResponse = new OrganizationMemberResponse();
-        organizationMemberResponse.setOrgMemberListPage(manager.listPage(request));
-        return Response.success(organizationMemberResponse);
+        return manager.listPage(request);
     }
 
 }
