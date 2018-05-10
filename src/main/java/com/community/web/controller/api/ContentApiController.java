@@ -8,6 +8,7 @@ import com.community.common.annotations.RequestJsonParam;
 import com.community.domain.core.Response;
 import com.community.domain.request.ContentRequest;
 import com.community.domain.response.ContentResponse;
+import com.community.domain.session.LoginContext;
 import com.community.manager.ContentManager;
 import com.community.service.ContentService;
 import com.community.web.core.AbstractAction;
@@ -26,6 +27,24 @@ public class ContentApiController extends AbstractAction<ContentService, Content
     @RequestMapping("detail")
     public Response<ContentResponse> contentDetail(@RequestJsonParam("request") ContentRequest request) {
         return manager.contentDetail(request);
+    }
+
+    @RequestMapping("mine.question")
+    public Response<ContentResponse> mineQuestion(@RequestJsonParam("request") ContentRequest request) {
+        if (null == request) {
+            return Response.success();
+        }
+        request.setUserId(LoginContext.getUserId());
+        return manager.listContentPage(request);
+    }
+
+    @RequestMapping("mine.answer")
+    public Response<ContentResponse> mineAnswer(@RequestJsonParam("request") ContentRequest request) {
+        if (null == request) {
+            return Response.success();
+        }
+        request.setUserId(LoginContext.getUserId());
+        return manager.listContentPage(request);
     }
 
 
