@@ -7,6 +7,7 @@ package com.community.manager;
 import com.community.common.enums.ApiHttpStatus;
 import com.community.common.util.BeanUtils;
 import com.community.common.util.FutureUtils;
+import com.community.common.util.UserUtils;
 import com.community.convert.ContentConvert;
 import com.community.dao.mapper.ActivityMapper;
 import com.community.dao.mapper.ContentMapper;
@@ -23,6 +24,7 @@ import com.community.domain.response.vo.*;
 import com.community.domain.session.LoginContext;
 import com.google.common.collect.Sets;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,6 +34,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 import static com.community.common.constant.Constant.*;
 
@@ -83,18 +86,20 @@ public class ContentManager {
             Set<Long> activityIdSet = Sets.newHashSet();
             //发帖人id
             Set<Long> userIdSet = Sets.newHashSet();
-            contentVOList.forEach(contentVO -> {
+            for (ContentVO contentVO : contentVOList) {
+                //发帖人id
+                userIdSet.add(contentVO.getUserId());
                 //组织
                 if (TypeEnum.ORG.getCode().equals(contentVO.getType()) || TypeEnum.ACTIVITY.getCode().equals(contentVO.getType())) {
                     orgIdSet.add(contentVO.getBizId());
+                    continue;
                 }
                 //活动
                 if (TypeEnum.ACTIVITY.getCode().equals(contentVO.getType())) {
                     activityIdSet.add(contentVO.getBizChildId());
+                    continue;
                 }
-                //发帖人id
-                userIdSet.add(contentVO.getUserId());
-            });
+            }
             //查询活动
             Future<Map<Long, ActivityDO>> activityFuture = activityManager.getActivityByIdsAsync(activityIdSet);
             //查询发帖人
@@ -108,11 +113,50 @@ public class ContentManager {
             Map<Long, UserInfoDO> userInfoDOMap = FutureUtils.get(userInfoFuture);
             //设置组织、活动、发帖人
             ContentConvert.setOrgActivityAndUserInfo(contentVOList, organizationDOMap, activityDOMap, userInfoDOMap);
+            //如果是回答 是否查询 问答
+            if (request.isQueryQuestion()) {
+                fillQuestionContentFromAnswer(contentVOList);
+            }
         }
         contentResponse.setContentList(contentVOList);
         contentResponse.setPagination(pagination);
         contentResponse.setHasMore(hasMore);
         return Response.success(contentResponse);
+    }
+
+    public void fillQuestionContentFromAnswer(List<ContentVO> contentVOList) {
+        if (CollectionUtils.isNotEmpty(contentVOList)) {
+            return;
+        }
+        Set<Long> questionIdSet = Sets.newHashSet();
+        for (ContentVO contentVOTemp : contentVOList) {
+            //活动
+            if (TypeEnum.ANSWER.getCode().equals(contentVOTemp.getType())) {
+                questionIdSet.add(contentVOTemp.getBizId());
+            }
+        }
+        if (CollectionUtils.isNotEmpty(questionIdSet)) {
+            Map<Long, ContentDO> contentDOMap = contentMapper.getByKeys(questionIdSet);
+            if (MapUtils.isNotEmpty(contentDOMap)) {
+                Set<Long> userIdSet = contentDOMap.values().stream().map(c -> c.getBizId()).collect(Collectors.toSet());
+                Map<Long, UserInfoDO> userInfoDOMap = userInfoMapper.getByKeys(userIdSet);
+                ContentDO questionContentDO = null;
+                ContentVO questionContentVO = null;
+                UserInfoVO userInfoVO = null;
+                for (ContentVO contentVOTemp : contentVOList) {
+                    //问答
+                    if (TypeEnum.ANSWER.getCode().equals(contentVOTemp.getType())) {
+                        questionContentDO = Optional.ofNullable(contentDOMap).map(a -> a.get(contentVOTemp.getBizId())).orElse(null);
+                        questionContentVO = BeanUtils.copyProperties(questionContentDO, ContentVO.class);
+                        if (null != questionContentVO) {
+                            userInfoVO = UserUtils.getUserInfoVO(userInfoDOMap, questionContentVO.getUserId());
+                            questionContentVO.setUserInfo(userInfoVO);
+                        }
+                        contentVOTemp.setQuestionContent(questionContentVO);
+                    }
+                }
+            }
+        }
     }
 
     public ContentVO contentById(Long id) {
@@ -129,6 +173,7 @@ public class ContentManager {
         contentVO.setUserInfo(userInfoVO);
         return contentVO;
     }
+
 
     public Response<ContentResponse> contentDetail(ContentRequest contentRequest) {
         ContentResponse contentResponse = new ContentResponse();

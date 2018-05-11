@@ -35,6 +35,8 @@ public class ContentRequest extends ContentDO implements PageAble, Serializable 
 
     private List<SortAble> sortList = Lists.newArrayList(new SortAble(Constant.SortFieldEnum.ID.getCode(), Constant.SortOrderEnum.DESC.getCode()));
 
+    private boolean isQueryQuestion;
+
     @Override
     public String toString() {
         return super.toString();

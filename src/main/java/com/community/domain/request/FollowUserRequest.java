@@ -15,10 +15,15 @@ import lombok.Data;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Data
 public class FollowUserRequest extends FollowUserDO implements PageAble, Serializable {
     private static final long serialVersionUID = 3148176768559230877L;
+
+    private Set<Long> followUserIdSet;
+    private Set<Long> userIdSet;
+    private boolean isQueryFollowEachOther;
 
     /**
      * 关注时间

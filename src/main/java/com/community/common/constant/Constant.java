@@ -25,6 +25,36 @@ public class Constant {
      */
     public static final Integer PUBLIC_ACTIVITY_ORG_ID = -1;
 
+    public enum FollowStatusEnum {
+        BLACK_LIST(-2, "黑名单"),
+        CANCEL(-1, "取消"),
+        FOLLOW(1, "关注"),;
+
+        private Integer code;
+        private String desc;
+
+        FollowStatusEnum(Integer code, String desc) {
+            this.code = code;
+            this.desc = desc;
+        }
+
+        public Integer getCode() {
+            return code;
+        }
+
+        public void setCode(Integer code) {
+            this.code = code;
+        }
+
+        public String getDesc() {
+            return desc;
+        }
+
+        public void setDesc(String desc) {
+            this.desc = desc;
+        }
+    }
+
     public enum IsDeleteEnum {
         NO(0, "未删除"),
         YES(1, "已删除");

@@ -278,6 +278,18 @@
             <if test="sysVersion != null">
                 AND sys_version = #{sysVersion}
             </if>
+            <if test="@Ognl@isNotEmpty(followUserIdSet)">
+                AND follow_user_id IN
+                <foreach collection="followUserIdSet" item="followUserIdTemp" open="(" separator="," close=")">
+                    #{followUserIdTemp}
+                </foreach>
+            </if>
+            <if test="@Ognl@isNotEmpty(userIdSet)">
+                AND user_id IN
+                <foreach collection="userIdSet" item="userIdSetTemp" open="(" separator="," close=")">
+                    #{userIdSetTemp}
+                </foreach>
+            </if>
         </where>
     </sql>
 
