@@ -461,6 +461,12 @@
 
     <sql id="listPage_where">
         <where>
+            <if test="@Ognl@isNotEmpty(idSet)">
+                AND id IN
+                <foreach collection="idSet" item="idTemp" open="(" separator="," close=")">
+                    #{idTemp}
+                </foreach>
+            </if>
             <if test="id != null">
                 AND id = #{id}
             </if>

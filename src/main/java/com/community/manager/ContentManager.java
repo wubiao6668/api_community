@@ -22,6 +22,7 @@ import com.community.domain.request.OrganizationMemberRequest;
 import com.community.domain.response.ContentResponse;
 import com.community.domain.response.vo.*;
 import com.community.domain.session.LoginContext;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
@@ -159,6 +160,40 @@ public class ContentManager {
         }
     }
 
+    public Map<Long, ContentVO> getByKeys(Set<Long> idSet) {
+        if (CollectionUtils.isEmpty(idSet)) {
+            return null;
+        }
+        Map<Long, ContentDO> contentDOMap = contentMapper.getByKeys(idSet);
+        if (MapUtils.isEmpty(contentDOMap)) {
+            return null;
+        }
+        //填充用户
+        Set<Long> userIdSet = contentDOMap.values().stream().map(c -> c.getUserId()).
+                collect(Collectors.toSet());
+        Map<Long, UserInfoVO> userInfoVOMap = userInfoManager.getUserByIdIfNotExistReturnDefault(userIdSet);
+        Map<Long, ContentVO> contentVOMap = Maps.newLinkedHashMap();
+        if (MapUtils.isNotEmpty(userInfoVOMap)) {
+            for (Map.Entry<Long, ContentDO> contentDOEntry : contentDOMap.entrySet()) {
+                ContentVO contentVOTemp = BeanUtils.copyProperties(contentDOEntry.getValue(), ContentVO.class);
+                contentVOTemp.setUserInfo(userInfoVOMap.get(contentDOEntry.getKey()));
+                contentVOMap.put(contentDOEntry.getKey(), contentVOTemp);
+            }
+        }
+        return contentVOMap;
+    }
+
+    public void fillUserInfo(List<ContentVO> contentVOList) {
+        if (CollectionUtils.isEmpty(contentVOList)) {
+            return;
+        }
+        Set<Long> userIdSet = contentVOList.stream().map(contentVO -> contentVO.getUserId()).collect(Collectors.toSet());
+        Map<Long, UserInfoVO> userInfoVOMap = userInfoManager.getUserByIdIfNotExistReturnDefault(userIdSet);
+        contentVOList.forEach(contentVO -> {
+            contentVO.setUserInfo(userInfoVOMap.get(contentVO.getUserId()));
+        });
+    }
+
     public ContentVO contentById(Long id) {
         if (null == id) {
             return null;
@@ -173,7 +208,6 @@ public class ContentManager {
         contentVO.setUserInfo(userInfoVO);
         return contentVO;
     }
-
 
     public Response<ContentResponse> contentDetail(ContentRequest contentRequest) {
         ContentResponse contentResponse = new ContentResponse();
@@ -215,6 +249,16 @@ public class ContentManager {
         }
         contentResponse.setContent(contentVO);
         return Response.success(contentResponse);
+    }
+
+    public static void main(String[] args) {
+        Map<Long, ContentDO> contentDOMap = Maps.newLinkedHashMap();
+        contentDOMap.put(12l, null);
+        contentDOMap.values();
+//        Sets.newHashSet().add(null);
+        Optional.ofNullable(contentDOMap).map(a -> a.values()).map(b -> b.stream().map(c -> c.getUserId()).collect(Collectors.toSet()));
+//        Optional.ofNullable(contentDOMap).map(a -> a.values().stream().map(b->b.getUserId()).collect(Collectors.toSet()));
+//        Set<Long> userIdSet = Optional.ofNullable(contentDOMap).map(a -> a.values().stream().map())
     }
 
 

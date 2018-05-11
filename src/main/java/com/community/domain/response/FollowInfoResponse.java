@@ -4,49 +4,22 @@
 
 package com.community.domain.response;
 
-import com.community.common.util.DateUtils;
-import com.community.domain.model.db.FollowInfoDO;
+import com.community.domain.core.Pagination;
+import com.community.domain.response.vo.FollowInfoVO;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
-public class FollowInfoResponse extends FollowInfoDO implements Serializable {
+public class FollowInfoResponse implements Serializable {
     private static final long serialVersionUID = 5454155825314635342L;
 
-    /**
-     * followTime
-     */
-    private String followTimeShow;
-    /**
-     * createTime
-     */
-    private String createTimeShow;
-    /**
-     * 修改时间
-     */
-    private String updateTimeShow;
-
-    /**
-     * followTime
-     */
-    public String getFollowTimeShow() {
-        return DateUtils.dateShow(getFollowTime());
-    }
-
-    /**
-     * createTime
-     */
-    public String getCreateTimeShow() {
-        return DateUtils.dateShow(getCreateTime());
-    }
-
-    /**
-     * 修改时间
-     */
-    public String getUpdateTimeShow() {
-        return DateUtils.dateShow(getUpdateTime());
-    }
+    private Boolean hasMore;
+    // 分页
+    private Pagination pagination;
+    // 结果列表
+    private List<FollowInfoVO> followInfoList;
 
     @Override
     public String toString() {

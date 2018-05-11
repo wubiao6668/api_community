@@ -15,6 +15,7 @@ import lombok.Data;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Data
 public class ContentRequest extends ContentDO implements PageAble, Serializable {
@@ -34,8 +35,14 @@ public class ContentRequest extends ContentDO implements PageAble, Serializable 
     private PaginationAble pagination = new PaginationAble();
 
     private List<SortAble> sortList = Lists.newArrayList(new SortAble(Constant.SortFieldEnum.ID.getCode(), Constant.SortOrderEnum.DESC.getCode()));
-
+    /**
+     * 是否需要查询问题（问答）
+     */
     private boolean isQueryQuestion;
+    /**
+     * id集合
+     */
+    private Set<Long> idSet;
 
     @Override
     public String toString() {

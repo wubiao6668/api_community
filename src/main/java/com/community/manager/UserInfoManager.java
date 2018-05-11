@@ -6,11 +6,13 @@ package com.community.manager;
 
 import com.community.common.constant.Constant;
 import com.community.common.util.BeanUtils;
+import com.community.common.util.UserUtils;
 import com.community.dao.mapper.UserInfoMapper;
 import com.community.domain.core.Page;
 import com.community.domain.model.db.UserInfoDO;
 import com.community.domain.request.UserInfoRequest;
 import com.community.domain.response.vo.UserInfoVO;
+import com.google.common.collect.Maps;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,4 +50,41 @@ public class UserInfoManager {
         return BeanUtils.copyProperties(userInfoDO, UserInfoVO.class);
     }
 
+    public Map<Long, UserInfoVO> getUserByIdIfNotExistReturnDefault(Set<Long> idSet) {
+        if (CollectionUtils.isEmpty(idSet)) {
+            return null;
+        }
+        Map<Long, UserInfoDO> userInfoDOMap = userInfoMapper.getByKeys(idSet);
+        Map<Long, UserInfoVO> userInfoVOMap = Maps.newLinkedHashMap();
+        idSet.forEach(id -> {
+            userInfoVOMap.put(id, UserUtils.getUserInfoVO(userInfoDOMap, id));
+        });
+        return userInfoVOMap;
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

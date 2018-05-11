@@ -22,6 +22,11 @@ public class FollowInfoRequest extends FollowInfoDO implements PageAble, Seriali
     private static final long serialVersionUID = 3148176768559230877L;
 
     /**
+     * 是否查询问题
+     */
+    private boolean isQueryQuestion;
+
+    /**
      * followTime
      */
     private LocalDateTime followTimeBegin;
