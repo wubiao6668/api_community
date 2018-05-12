@@ -3,7 +3,7 @@
 <mapper namespace="com.community.dao.mapper.MessageSystemDetailMapper">
 
     <sql id="columns">
-        id,msg_sys_id,sender_user_id,receiver_user_id,status,send_time,receive_time,type,biz_id,is_delete,create_user_id,create_time,update_user_id,update_time,sys_version
+        id,msg_sys_id,sender_user_id,receiver_user_id,status,send_time,receive_time,msg_type,type,biz_id,is_delete,create_user_id,create_time,update_user_id,update_time,sys_version
     </sql>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
@@ -14,6 +14,7 @@
         status,
         send_time,
         receive_time,
+        msg_type,
         type,
         biz_id,
         is_delete,
@@ -29,6 +30,7 @@
         #{status},
         #{sendTime},
         #{receiveTime},
+        #{msgType},
         #{type},
         #{bizId},
         0,
@@ -59,6 +61,9 @@
         </if>
         <if test="@Ognl@isNotEmpty(receiveTime)">
             receive_time,
+        </if>
+        <if test="@Ognl@isNotEmpty(msgType)">
+            msg_type,
         </if>
         <if test="@Ognl@isNotEmpty(type)">
             type,
@@ -97,6 +102,9 @@
         <if test="@Ognl@isNotEmpty(receiveTime)">
             #{receiveTime},
         </if>
+        <if test="@Ognl@isNotEmpty(msgType)">
+            #{msgType},
+        </if>
         <if test="@Ognl@isNotEmpty(type)">
             #{type},
         </if>
@@ -126,6 +134,7 @@
         status = #{status},
         send_time = #{sendTime},
         receive_time = #{receiveTime},
+        msg_type = #{msgType},
         type = #{type},
         biz_id = #{bizId},
         is_delete = #{isDelete},
@@ -158,6 +167,9 @@
         </if>
         <if test="null != receiveTime">
             receive_time = #{receiveTime},
+        </if>
+        <if test="null != msgType">
+            msg_type = #{msgType},
         </if>
         <if test="null != type">
             type = #{type},
@@ -203,6 +215,9 @@
         </if>
         <if test="null != receiveTime">
             receive_time = #{receiveTime},
+        </if>
+        <if test="null != msgType">
+            msg_type = #{msgType},
         </if>
         <if test="null != type">
             type = #{type},
@@ -328,6 +343,9 @@
             </if>
 
 
+            <if test="msgType != null">
+                AND msg_type = #{msgType}
+            </if>
             <if test="type != null">
                 AND type = #{type}
             </if>

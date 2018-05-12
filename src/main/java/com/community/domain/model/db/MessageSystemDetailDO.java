@@ -1,5 +1,5 @@
 /**
- * Created by wubiao on - 2018/04/29.
+ * Created by wubiao on - 2018/05/12.
  */
 
 package com.community.domain.model.db;
@@ -43,7 +43,11 @@ public class MessageSystemDetailDO implements Serializable {
      */
     private LocalDateTime receiveTime;
     /**
-     * 消息类型100-系统（101-系统）200-点赞（1-组织内容、2-活动内容、3-问题内容、4-回答内容、5-评论、6-回复）、300-评论回复（1-评论回答、2-评论帖子、3-回复评论、4-回复回复）、400-问答（1-回答问题）、500-活动（1-活动报名）
+     * 消息表类型
+     */
+    private Integer msgType;
+    /**
+     * 具体类型
      */
     private Integer type;
     /**
