@@ -280,6 +280,12 @@
             <if test="sysVersion != null">
                 AND sys_version = #{sysVersion}
             </if>
+            <if test="@Ognl@isNotEmpty(typeSet)">
+                AND type IN
+                <foreach collection="typeSet" item="typeTemp" open="(" separator="," close=")">
+                    #{typeTemp}
+                </foreach>
+            </if>
         </where>
     </sql>
 

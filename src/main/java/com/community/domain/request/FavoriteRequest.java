@@ -15,10 +15,16 @@ import lombok.Data;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Data
 public class FavoriteRequest extends FavoriteDO implements PageAble, Serializable {
     private static final long serialVersionUID = 3148176768559230877L;
+
+    /**
+     * 收藏类型
+     */
+    private Set<Integer> typeSet;
 
     /**
      * createTime

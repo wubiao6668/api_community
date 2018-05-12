@@ -125,13 +125,18 @@ public class ContentManager {
         return Response.success(contentResponse);
     }
 
+    /**
+     * 如果是问答需要填充问题
+     *
+     * @param contentVOList
+     */
     public void fillQuestionContentFromAnswer(List<ContentVO> contentVOList) {
         if (CollectionUtils.isNotEmpty(contentVOList)) {
             return;
         }
         Set<Long> questionIdSet = Sets.newHashSet();
         for (ContentVO contentVOTemp : contentVOList) {
-            //活动
+            //问答
             if (TypeEnum.ANSWER.getCode().equals(contentVOTemp.getType())) {
                 questionIdSet.add(contentVOTemp.getBizId());
             }
@@ -160,6 +165,12 @@ public class ContentManager {
         }
     }
 
+    /**
+     * 根据id查询并且填充用户信息
+     *
+     * @param idSet
+     * @return
+     */
     public Map<Long, ContentVO> getByKeys(Set<Long> idSet) {
         if (CollectionUtils.isEmpty(idSet)) {
             return null;
@@ -183,6 +194,11 @@ public class ContentManager {
         return contentVOMap;
     }
 
+    /**
+     * 填充用户信息
+     *
+     * @param contentVOList
+     */
     public void fillUserInfo(List<ContentVO> contentVOList) {
         if (CollectionUtils.isEmpty(contentVOList)) {
             return;
@@ -194,6 +210,12 @@ public class ContentManager {
         });
     }
 
+    /**
+     * 根据id查询
+     *
+     * @param id
+     * @return
+     */
     public ContentVO contentById(Long id) {
         if (null == id) {
             return null;
@@ -209,6 +231,12 @@ public class ContentManager {
         return contentVO;
     }
 
+    /**
+     * 帖子详情
+     *
+     * @param contentRequest
+     * @return
+     */
     public Response<ContentResponse> contentDetail(ContentRequest contentRequest) {
         ContentResponse contentResponse = new ContentResponse();
         if (null == contentRequest || null == contentRequest.getId()) {

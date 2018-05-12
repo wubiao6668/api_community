@@ -162,6 +162,13 @@ public class Constant {
             this.desc = desc;
         }
 
+        public static boolean isContentType(Integer type) {
+            if (ORG.getCode().equals(type) || ACTIVITY.getCode().equals(type) || ASK.getCode().equals(type) || ANSWER.getCode().equals(type)) {
+                return true;
+            }
+            return false;
+        }
+
         private Integer code;
         private String desc;
 
