@@ -9,7 +9,7 @@
  Target Server Version : 80011
  File Encoding         : utf-8
 
- Date: 05/03/2018 10:13:05 AM
+ Date: 05/25/2018 19:09:09 PM
 */
 
 SET NAMES utf8;
@@ -64,6 +64,27 @@ CREATE TABLE `activity_member` (
   `sys_version` int(11) NOT NULL DEFAULT '0' COMMENT '版本号',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='活动成员';
+
+-- ----------------------------
+--  Table structure for `category`
+-- ----------------------------
+DROP TABLE IF EXISTS `category`;
+CREATE TABLE `category` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL DEFAULT '' COMMENT '分类名称',
+  `type` int(11) NOT NULL DEFAULT '1' COMMENT '分类类型(1-群)',
+  `sequence` int(11) NOT NULL DEFAULT '0' COMMENT '顺序',
+  `is_show` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0-展示1-隐藏',
+  `parent_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '父级节点',
+  `level` bigint(20) NOT NULL DEFAULT '1' COMMENT '节点数',
+  `is_delete` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否删除（0-未删除、1-已删除）',
+  `create_user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建者user_id',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '修改人user_id',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+  `sys_version` int(11) NOT NULL DEFAULT '0' COMMENT '版本号',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='分类表';
 
 -- ----------------------------
 --  Table structure for `comment`
@@ -181,6 +202,104 @@ CREATE TABLE `follow_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='关注人';
 
 -- ----------------------------
+--  Table structure for `group_info`
+-- ----------------------------
+DROP TABLE IF EXISTS `group_info`;
+CREATE TABLE `group_info` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL DEFAULT '' COMMENT '组织名称',
+  `introduction` varchar(500) NOT NULL DEFAULT '' COMMENT '介绍',
+  `notice` varchar(500) NOT NULL DEFAULT '' COMMENT '公告',
+  `img` varchar(250) NOT NULL DEFAULT '' COMMENT '图片',
+  `originator_user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '发起人',
+  `type` tinyint(4) NOT NULL DEFAULT '1' COMMENT '类型（1-组织、2-活动、3-分类）',
+  `status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态（-1-驳回、1-待审核 、2-审核通过）',
+  `join_way` tinyint(4) NOT NULL DEFAULT '1' COMMENT '加入方式（1-不需要验证、2-需要验证）',
+  `speak_permission` tinyint(4) NOT NULL DEFAULT '1' COMMENT '发言权限（1-不限、2-仅管理员、3-管理员、班委、4-管理员、班委、普通成员）',
+  `join_question` varchar(250) NOT NULL DEFAULT '' COMMENT '加入组织问题',
+  `member_num` int(11) NOT NULL DEFAULT '0' COMMENT '成员数',
+  `latitude` double NOT NULL DEFAULT '0' COMMENT '纬度',
+  `longitude` double NOT NULL DEFAULT '0' COMMENT '经度',
+  `city_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '城市',
+  `biz_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '分类ID、活动ID、组织ID',
+  `member_num_limit` int(11) NOT NULL DEFAULT '500' COMMENT '群人数上限',
+  `is_delete` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否删除（0-未删除、1-已删除）',
+  `create_user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建者user_id',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '修改人user_id',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+  `sys_version` int(11) NOT NULL DEFAULT '0' COMMENT '版本号',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='群信息表';
+
+-- ----------------------------
+--  Table structure for `group_member`
+-- ----------------------------
+DROP TABLE IF EXISTS `group_member`;
+CREATE TABLE `group_member` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `group_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '群组id',
+  `user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '用户id',
+  `status` int(11) NOT NULL DEFAULT '1' COMMENT '状态（-1-待审核、1-成功加入、2-退出、3-拒绝加入）',
+  `apply_num` int(11) NOT NULL DEFAULT '1' COMMENT '申请次数',
+  `apply_last_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后申请时间',
+  `join_reason` varchar(255) NOT NULL DEFAULT '' COMMENT '加入理由',
+  `operator_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '操作人',
+  `role` int(11) NOT NULL DEFAULT '3' COMMENT '角色（1-群主、2-管理员,3-普通用户）',
+  `role_alias` varchar(10) NOT NULL DEFAULT '' COMMENT '角色别名',
+  `interdiction_status` int(11) NOT NULL DEFAULT '3' COMMENT '禁言状态（-1-禁言中,1-正常）',
+  `interdiction_expiry_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '禁言过期时间',
+  `is_delete` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否删除（0-未删除、1-已删除）',
+  `create_user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建者user_id',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '修改人user_id',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+  `sys_version` int(11) NOT NULL DEFAULT '0' COMMENT '版本号',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='群成员用户表';
+
+-- ----------------------------
+--  Table structure for `group_message`
+-- ----------------------------
+DROP TABLE IF EXISTS `group_message`;
+CREATE TABLE `group_message` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `group_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '群组id',
+  `user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '用户id',
+  `at_info` varchar(255) NOT NULL DEFAULT '' COMMENT '@信息 json',
+  `last_read_msg_detail_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '最后一次读取信息id',
+  `is_delete` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否删除（0-未删除、1-已删除）',
+  `create_user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建者user_id',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '修改人user_id',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+  `sys_version` int(11) NOT NULL DEFAULT '0' COMMENT '版本号',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='群用户消息表';
+
+-- ----------------------------
+--  Table structure for `group_message_detail`
+-- ----------------------------
+DROP TABLE IF EXISTS `group_message_detail`;
+CREATE TABLE `group_message_detail` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `group_id` bigint(20) NOT NULL DEFAULT '0' COMMENT 'group_info 表id',
+  `sender_user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '发送人',
+  `at_info` varchar(255) NOT NULL DEFAULT '' COMMENT '@信息 json',
+  `type` int(11) NOT NULL DEFAULT '0' COMMENT '消息类型（1-系统消息、2-用户）',
+  `is_anonymous` tinyint(4) NOT NULL DEFAULT '1' COMMENT '是否匿名（-1-是、1-否）',
+  `content` varchar(255) NOT NULL DEFAULT '' COMMENT '消息内容',
+  `send_msg_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '消息时间',
+  `is_delete` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否删除（0-未删除、1-已删除）',
+  `create_user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建者user_id',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '修改人user_id',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+  `sys_version` int(11) NOT NULL DEFAULT '0' COMMENT '版本号',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='群用户消息详细表';
+
+-- ----------------------------
 --  Table structure for `like`
 -- ----------------------------
 DROP TABLE IF EXISTS `like`;
@@ -234,7 +353,8 @@ CREATE TABLE `message_system_detail` (
   `status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '状态（-1-未读、2-已读）',
   `send_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '发送时间',
   `receive_time` datetime NOT NULL COMMENT '接收时间',
-  `type` int(11) NOT NULL DEFAULT '0' COMMENT '消息类型100-系统（101-系统）200-点赞（1-组织内容、2-活动内容、3-问题内容、4-回答内容、5-评论、6-回复）、300-评论回复（1-评论回答、2-评论帖子、3-回复评论、4-回复回复）、400-问答（1-回答问题）、500-活动（1-活动报名）',
+  `msg_type` int(11) NOT NULL DEFAULT '0' COMMENT '消息表类型',
+  `type` int(11) NOT NULL DEFAULT '0' COMMENT '具体类型',
   `biz_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '表主键',
   `is_delete` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否删除（0-未删除、1-已删除）',
   `create_user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建者user_id',
@@ -331,7 +451,7 @@ CREATE TABLE `tag` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(20) NOT NULL DEFAULT '' COMMENT '标签名称',
   `biz_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '业务主表id',
-  `type` int(11) NOT NULL DEFAULT '1' COMMENT '标签类型(1-帖子、2-活动)',
+  `type` int(11) NOT NULL DEFAULT '1' COMMENT '标签类型(1-帖子、2-活动、3-群)',
   `sequence` int(11) NOT NULL DEFAULT '0' COMMENT '顺序',
   `is_show` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0-展示1-隐藏',
   `is_delete` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否删除（0-未删除、1-已删除）',
@@ -344,26 +464,14 @@ CREATE TABLE `tag` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='标签';
 
 -- ----------------------------
---  Table structure for `tjsontb`
--- ----------------------------
-DROP TABLE IF EXISTS `tjsontb`;
-CREATE TABLE `tjsontb` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) DEFAULT NULL,
-  `jdoc_obj` json DEFAULT NULL,
-  `jdoc_json` json DEFAULT NULL,
-  `jdoc_obja` json DEFAULT NULL,
-  `jdoc_jsona` json DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
-
--- ----------------------------
 --  Table structure for `user_info`
 -- ----------------------------
 DROP TABLE IF EXISTS `user_info`;
 CREATE TABLE `user_info` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL DEFAULT '' COMMENT '名称',
+  `nickName` varchar(50) NOT NULL DEFAULT '' COMMENT '名称',
+  `avatar` varchar(255) NOT NULL DEFAULT '' COMMENT '头像',
+  `email` varchar(50) NOT NULL DEFAULT '' COMMENT '电子邮件',
   `introduction` varchar(1024) NOT NULL DEFAULT '' COMMENT '个人简介',
   `last_login_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '上次登录时间',
   `login_ip` varchar(20) NOT NULL DEFAULT '' COMMENT 'ip',
@@ -377,5 +485,54 @@ CREATE TABLE `user_info` (
   `sys_version` int(11) NOT NULL DEFAULT '0' COMMENT '版本号',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户信息';
+
+-- ----------------------------
+--  Table structure for `user_message`
+-- ----------------------------
+DROP TABLE IF EXISTS `user_message`;
+CREATE TABLE `user_message` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `short_un_read_msg_num` int(11) NOT NULL DEFAULT '0' COMMENT '未读消息数',
+  `long_un_read_msg_num` int(11) NOT NULL DEFAULT '0' COMMENT '未读消息数',
+  `short_user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '长userId',
+  `long_user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '短userId',
+  `last_send_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '最后发送时间',
+  `content` varchar(255) NOT NULL DEFAULT '' COMMENT '消息内容',
+  `short_last_msg_detail_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '长userId 上次阅读消息的最后一个Id',
+  `long_last_msg_detail_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '短userId 上次阅读消息的最后一个Id',
+  `is_short_delete` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否删除（0-未删除、1-已删除）',
+  `is_long_delete` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否删除（0-未删除、1-已删除）',
+  `is_delete` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否删除（0-未删除、1-已删除）',
+  `create_user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建者user_id',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '修改人user_id',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+  `sys_version` int(11) NOT NULL DEFAULT '0' COMMENT '版本号',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户消息表';
+
+-- ----------------------------
+--  Table structure for `user_message_detail`
+-- ----------------------------
+DROP TABLE IF EXISTS `user_message_detail`;
+CREATE TABLE `user_message_detail` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `msg_id` bigint(20) NOT NULL DEFAULT '0' COMMENT 'user_message 表id',
+  `sender_user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '发送人',
+  `receiver_user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '接收人',
+  `type` int(11) NOT NULL DEFAULT '0' COMMENT '消息类型（1-系统消息、2-用户）',
+  `is_read` tinyint(4) NOT NULL DEFAULT '1' COMMENT '是否已读（-1-未读、1-已读）',
+  `content` varchar(255) NOT NULL DEFAULT '' COMMENT '消息内容',
+  `send_msg_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '消息时间',
+  `is_sender_delete` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否删除（0-未删除、1-已删除）',
+  `is_receiver_delete` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否删除（0-未删除、1-已删除）',
+  `is_delete` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否删除（0-未删除、1-已删除）',
+  `create_user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '创建者user_id',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT '修改人user_id',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+  `sys_version` int(11) NOT NULL DEFAULT '0' COMMENT '版本号',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户消息详细表';
 
 SET FOREIGN_KEY_CHECKS = 1;
