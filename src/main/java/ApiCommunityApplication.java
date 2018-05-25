@@ -1,4 +1,4 @@
-import com.community.common.web.handler.TestHandler;
+import com.community.web.websocket.handler.TestHandler;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -7,7 +7,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -31,7 +30,7 @@ public class ApiCommunityApplication {
             public void run() {
                 System.out.println("*******start*****");
                 List<WebSocketSession> webSocketSessionList = TestHandler.socketSessionList;
-                for (WebSocketSession sessionTemp : webSocketSessionList){
+                for (WebSocketSession sessionTemp : webSocketSessionList) {
                     TextMessage textMessage = new TextMessage("sdfsfds" + RandomStringUtils.randomAlphanumeric(10000));
                     try {
                         sessionTemp.sendMessage(textMessage);

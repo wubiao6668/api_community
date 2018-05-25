@@ -4,6 +4,7 @@
 
 package com.community.web.controller.api;
 
+import com.community.manager.GroupMessageDetailManager;
 import com.community.service.GroupMessageDetailService;
 import com.community.web.core.AbstractAction;
 import org.springframework.stereotype.Controller;

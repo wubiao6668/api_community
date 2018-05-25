@@ -1,16 +1,16 @@
-package com.community.common.web.handler;
+package com.community.web.websocket.handler;
 
 import com.google.common.collect.Lists;
-import org.springframework.web.socket.*;
+import org.springframework.web.socket.CloseStatus;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 public class TestHandler extends TextWebSocketHandler {
 
-    public static  List<WebSocketSession> socketSessionList = Lists.newArrayList();
+    public static List<WebSocketSession> socketSessionList = Lists.newArrayList();
 
 
     @Override

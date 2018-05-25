@@ -1,6 +1,6 @@
-package com.community.config.web;
+package com.community.web.websocket;
 
-import com.community.common.web.handler.TestHandler;
+import com.community.web.websocket.handler.TestHandler;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
@@ -12,6 +12,6 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(new TestHandler(), "/test").withSockJS();
+        registry.addHandler(new TestHandler(), "/ws/channel").withSockJS();
     }
 }
