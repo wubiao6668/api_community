@@ -5,6 +5,7 @@ import com.community.common.util.JacksonUtil;
 import com.community.dao.mapper.UserMessageDetailMapper;
 import com.community.dao.mapper.UserMessageMapper;
 import com.community.domain.bo.websocket.WsChannelFriendBO;
+import com.community.domain.bo.websocket.WsChannelGroupBO;
 import com.community.domain.model.db.UserMessageDetailDO;
 import com.community.domain.model.db.extend.UserMessageExtendDO;
 import com.community.domain.response.vo.UserInfoVO;
@@ -86,7 +87,8 @@ public class WsChannelManager {
         }
     }
 
-    public void sendToGroup(WsChannelFriendBO wsChannelFriendBO) {
+    public void sendToGroup(WsChannelGroupBO wsChannelGroupBO) {
+        //
     }
 
 
