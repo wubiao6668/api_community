@@ -3,7 +3,7 @@
 <mapper namespace="com.community.dao.mapper.UserChatInfoMapper">
 
     <sql id="columns">
-        id,short_un_read_msg_num,long_un_read_msg_num,short_user_id,long_user_id,last_send_time,content,short_last_msg_detail_id,long_last_msg_detail_id,is_short_delete,is_long_delete,is_delete,create_user_id,create_time,update_user_id,update_time,sys_version
+        id,short_un_read_msg_num,long_un_read_msg_num,short_user_id,long_user_id,last_send_time,content,is_short_delete,is_long_delete,is_delete,create_user_id,create_time,update_user_id,update_time,sys_version
     </sql>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
@@ -14,8 +14,6 @@
         long_user_id,
         last_send_time,
         content,
-        short_last_msg_detail_id,
-        long_last_msg_detail_id,
         is_short_delete,
         is_long_delete,
         is_delete,
@@ -31,8 +29,6 @@
         #{longUserId},
         #{lastSendTime},
         #{content},
-        #{shortLastMsgDetailId},
-        #{longLastMsgDetailId},
         #{isShortDelete},
         #{isLongDelete},
         0,
@@ -63,12 +59,6 @@
         </if>
         <if test="@Ognl@isNotEmpty(content)">
             content,
-        </if>
-        <if test="@Ognl@isNotEmpty(shortLastMsgDetailId)">
-            short_last_msg_detail_id,
-        </if>
-        <if test="@Ognl@isNotEmpty(longLastMsgDetailId)">
-            long_last_msg_detail_id,
         </if>
         <if test="@Ognl@isNotEmpty(isShortDelete)">
             is_short_delete,
@@ -107,12 +97,6 @@
         <if test="@Ognl@isNotEmpty(content)">
             #{content},
         </if>
-        <if test="@Ognl@isNotEmpty(shortLastMsgDetailId)">
-            #{shortLastMsgDetailId},
-        </if>
-        <if test="@Ognl@isNotEmpty(longLastMsgDetailId)">
-            #{longLastMsgDetailId},
-        </if>
         <if test="@Ognl@isNotEmpty(isShortDelete)">
             #{isShortDelete},
         </if>
@@ -142,8 +126,6 @@
         long_user_id = #{longUserId},
         last_send_time = #{lastSendTime},
         content = #{content},
-        short_last_msg_detail_id = #{shortLastMsgDetailId},
-        long_last_msg_detail_id = #{longLastMsgDetailId},
         is_short_delete = #{isShortDelete},
         is_long_delete = #{isLongDelete},
         is_delete = #{isDelete},
@@ -176,12 +158,6 @@
         </if>
         <if test="null != content">
             content = #{content},
-        </if>
-        <if test="null != shortLastMsgDetailId">
-            short_last_msg_detail_id = #{shortLastMsgDetailId},
-        </if>
-        <if test="null != longLastMsgDetailId">
-            long_last_msg_detail_id = #{longLastMsgDetailId},
         </if>
         <if test="null != isShortDelete">
             is_short_delete = #{isShortDelete},
@@ -227,12 +203,6 @@
         </if>
         <if test="null != content">
             content = #{content},
-        </if>
-        <if test="null != shortLastMsgDetailId">
-            short_last_msg_detail_id = #{shortLastMsgDetailId},
-        </if>
-        <if test="null != longLastMsgDetailId">
-            long_last_msg_detail_id = #{longLastMsgDetailId},
         </if>
         <if test="null != isShortDelete">
             is_short_delete = #{isShortDelete},
@@ -360,12 +330,6 @@
             <if test="content != null">
                 AND content = #{content}
             </if>
-            <if test="shortLastMsgDetailId != null">
-                AND short_last_msg_detail_id = #{shortLastMsgDetailId}
-            </if>
-            <if test="longLastMsgDetailId != null">
-                AND long_last_msg_detail_id = #{longLastMsgDetailId}
-            </if>
             <if test="isShortDelete != null">
                 AND is_short_delete = #{isShortDelete}
             </if>
@@ -388,5 +352,177 @@
             </if>
         </where>
     </sql>
+
+    <insert id="insertSelectiveOrUpdateIfDuplicateKey">
+        INSERT INTO user_chat_info (
+        <if test="@Ognl@isNotEmpty(shortUnReadMsgNum)">
+            short_un_read_msg_num,
+        </if>
+        <if test="@Ognl@isNotEmpty(longUnReadMsgNum)">
+            long_un_read_msg_num,
+        </if>
+        <if test="@Ognl@isNotEmpty(shortUserId)">
+            short_user_id,
+        </if>
+        <if test="@Ognl@isNotEmpty(longUserId)">
+            long_user_id,
+        </if>
+        <if test="@Ognl@isNotEmpty(lastSendTime)">
+            last_send_time,
+        </if>
+        <if test="@Ognl@isNotEmpty(content)">
+            content,
+        </if>
+        <if test="@Ognl@isNotEmpty(isShortDelete)">
+            is_short_delete,
+        </if>
+        <if test="@Ognl@isNotEmpty(isLongDelete)">
+            is_long_delete,
+        </if>
+        is_delete,
+        <if test="@Ognl@isNotEmpty(createUserId)">
+            create_user_id,
+        </if>
+        create_time,
+        <if test="@Ognl@isNotEmpty(updateUserId)">
+            update_user_id,
+        </if>
+        <if test="@Ognl@isNotEmpty(updateTime)">
+            update_time,
+        </if>
+        sys_version
+        ) VALUES (
+        <if test="@Ognl@isNotEmpty(shortUnReadMsgNum)">
+            #{shortUnReadMsgNum},
+        </if>
+        <if test="@Ognl@isNotEmpty(longUnReadMsgNum)">
+            #{longUnReadMsgNum},
+        </if>
+        <if test="@Ognl@isNotEmpty(shortUserId)">
+            #{shortUserId},
+        </if>
+        <if test="@Ognl@isNotEmpty(longUserId)">
+            #{longUserId},
+        </if>
+        <if test="@Ognl@isNotEmpty(lastSendTime)">
+            #{lastSendTime},
+        </if>
+        <if test="@Ognl@isNotEmpty(content)">
+            #{content},
+        </if>
+        <if test="@Ognl@isNotEmpty(isShortDelete)">
+            #{isShortDelete},
+        </if>
+        <if test="@Ognl@isNotEmpty(isLongDelete)">
+            #{isLongDelete},
+        </if>
+        0,
+        <if test="@Ognl@isNotEmpty(createUserId)">
+            #{createUserId},
+        </if>
+        now(),
+        <if test="@Ognl@isNotEmpty(updateUserId)">
+            #{updateUserId},
+        </if>
+        <if test="@Ognl@isNotEmpty(updateTime)">
+            #{updateTime},
+        </if>
+        1
+        ) ON DUPLICATE KEY UPDATE
+        <if test="null != shortUnReadMsgNum">
+            short_un_read_msg_num = #{shortUnReadMsgNum},
+        </if>
+        <if test="null != longUnReadMsgNum">
+            long_un_read_msg_num = #{longUnReadMsgNum},
+        </if>
+        <if test="null != shortUserId">
+            short_user_id = #{shortUserId},
+        </if>
+        <if test="null != longUserId">
+            long_user_id = #{longUserId},
+        </if>
+        <if test="null != lastSendTime">
+            last_send_time = #{lastSendTime},
+        </if>
+        <if test="null != content">
+            content = #{content},
+        </if>
+        <if test="null != isShortDelete">
+            is_short_delete = #{isShortDelete},
+        </if>
+        <if test="null != isLongDelete">
+            is_long_delete = #{isLongDelete},
+        </if>
+        <if test="null != isDelete">
+            is_delete = #{isDelete},
+        </if>
+        <if test="null != createUserId">
+            create_user_id = #{createUserId},
+        </if>
+        <if test="null != createTime">
+            create_time = #{createTime},
+        </if>
+        <if test="null != updateUserId">
+            update_user_id = #{updateUserId},
+        </if>
+        <if test="@Ognl@isNotEmpty(shortUnReadMsgNumInc)">
+            short_un_read_msg_num = short_un_read_msg_num + #{shortUnReadMsgNumInc},
+        </if>
+        <if test="@Ognl@isNotEmpty(longUnReadMsgNumInc)">
+            long_un_read_msg_num = long_un_read_msg_num + #{longUnReadMsgNumInc},
+        </if>
+        update_time = now(),
+        sys_version = sys_version + 1
+    </insert>
+
+    <update id="updateExtSelective">
+        UPDATE user_chat_info SET
+        <if test="null != shortUnReadMsgNum">
+            short_un_read_msg_num = #{shortUnReadMsgNum},
+        </if>
+        <if test="null != longUnReadMsgNum">
+            long_un_read_msg_num = #{longUnReadMsgNum},
+        </if>
+        <if test="null != shortUserId">
+            short_user_id = #{shortUserId},
+        </if>
+        <if test="null != longUserId">
+            long_user_id = #{longUserId},
+        </if>
+        <if test="null != lastSendTime">
+            last_send_time = #{lastSendTime},
+        </if>
+        <if test="null != content">
+            content = #{content},
+        </if>
+        <if test="null != isShortDelete">
+            is_short_delete = #{isShortDelete},
+        </if>
+        <if test="null != isLongDelete">
+            is_long_delete = #{isLongDelete},
+        </if>
+        <if test="null != isDelete">
+            is_delete = #{isDelete},
+        </if>
+        <if test="null != createUserId">
+            create_user_id = #{createUserId},
+        </if>
+        <if test="null != createTime">
+            create_time = #{createTime},
+        </if>
+        <if test="null != updateUserId">
+            update_user_id = #{updateUserId},
+        </if>
+        <if test="@Ognl@isNotEmpty(shortUnReadMsgNumInc)">
+            short_un_read_msg_num = short_un_read_msg_num + #{shortUnReadMsgNumInc},
+        </if>
+        <if test="@Ognl@isNotEmpty(longUnReadMsgNumInc)">
+            long_un_read_msg_num = long_un_read_msg_num + #{longUnReadMsgNumInc},
+        </if>
+        update_time = now(),
+        sys_version = sys_version + 1
+        WHERE
+        id = #{id}
+    </update>
 
 </mapper>

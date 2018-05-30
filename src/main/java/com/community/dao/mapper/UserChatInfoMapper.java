@@ -7,10 +7,14 @@ package com.community.dao.mapper;
 
 import com.community.common.core.CurdAble;
 import com.community.domain.model.db.UserChatInfoDO;
+import com.community.domain.model.db.extend.UserChatInfoExtendDO;
 import com.community.domain.request.UserChatInfoRequest;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface UserChatInfoMapper extends CurdAble<Long, UserChatInfoRequest, UserChatInfoDO> {
 
+    int insertSelectiveOrUpdateIfDuplicateKey(UserChatInfoExtendDO userChatInfoExtendDO);
+
+    int updateExtSelective(UserChatInfoExtendDO userChatInfoExtendDO);
 }

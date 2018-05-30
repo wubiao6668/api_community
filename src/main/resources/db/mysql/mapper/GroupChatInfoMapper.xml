@@ -3,7 +3,7 @@
 <mapper namespace="com.community.dao.mapper.GroupChatInfoMapper">
 
     <sql id="columns">
-        id,group_id,user_id,at_info,last_read_msg_detail_id,is_delete,create_user_id,create_time,update_user_id,update_time,sys_version
+        id,group_id,user_id,at_info,last_read_msg_id,is_delete,create_user_id,create_time,update_user_id,update_time,sys_version
     </sql>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
@@ -11,7 +11,7 @@
         group_id,
         user_id,
         at_info,
-        last_read_msg_detail_id,
+        last_read_msg_id,
         is_delete,
         create_user_id,
         create_time,
@@ -22,7 +22,7 @@
         #{groupId},
         #{userId},
         #{atInfo},
-        #{lastReadMsgDetailId},
+        #{lastReadMsgId},
         0,
         #{createUserId},
         now(),
@@ -43,8 +43,8 @@
         <if test="@Ognl@isNotEmpty(atInfo)">
             at_info,
         </if>
-        <if test="@Ognl@isNotEmpty(lastReadMsgDetailId)">
-            last_read_msg_detail_id,
+        <if test="@Ognl@isNotEmpty(lastReadMsgId)">
+            last_read_msg_id,
         </if>
         is_delete,
         <if test="@Ognl@isNotEmpty(createUserId)">
@@ -68,8 +68,8 @@
         <if test="@Ognl@isNotEmpty(atInfo)">
             #{atInfo},
         </if>
-        <if test="@Ognl@isNotEmpty(lastReadMsgDetailId)">
-            #{lastReadMsgDetailId},
+        <if test="@Ognl@isNotEmpty(lastReadMsgId)">
+            #{lastReadMsgId},
         </if>
         0,
         <if test="@Ognl@isNotEmpty(createUserId)">
@@ -91,7 +91,7 @@
         group_id = #{groupId},
         user_id = #{userId},
         at_info = #{atInfo},
-        last_read_msg_detail_id = #{lastReadMsgDetailId},
+        last_read_msg_id = #{lastReadMsgId},
         is_delete = #{isDelete},
         create_user_id = #{createUserId},
         create_time = #{createTime},
@@ -114,8 +114,8 @@
         <if test="null != atInfo">
             at_info = #{atInfo},
         </if>
-        <if test="null != lastReadMsgDetailId">
-            last_read_msg_detail_id = #{lastReadMsgDetailId},
+        <if test="null != lastReadMsgId">
+            last_read_msg_id = #{lastReadMsgId},
         </if>
         <if test="null != isDelete">
             is_delete = #{isDelete},
@@ -147,8 +147,8 @@
         <if test="null != atInfo">
             at_info = #{atInfo},
         </if>
-        <if test="null != lastReadMsgDetailId">
-            last_read_msg_detail_id = #{lastReadMsgDetailId},
+        <if test="null != lastReadMsgId">
+            last_read_msg_id = #{lastReadMsgId},
         </if>
         <if test="null != isDelete">
             is_delete = #{isDelete},
@@ -263,8 +263,8 @@
             <if test="atInfo != null">
                 AND at_info = #{atInfo}
             </if>
-            <if test="lastReadMsgDetailId != null">
-                AND last_read_msg_detail_id = #{lastReadMsgDetailId}
+            <if test="lastReadMsgId != null">
+                AND last_read_msg_id = #{lastReadMsgId}
             </if>
             <if test="isDelete != null">
                 AND is_delete = #{isDelete}

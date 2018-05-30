@@ -43,14 +43,6 @@ public class UserChatInfoDO implements Serializable {
      */
     private String content;
     /**
-     * 长userId 上次阅读消息的最后一个Id
-     */
-    private Long shortLastMsgDetailId;
-    /**
-     * 短userId 上次阅读消息的最后一个Id
-     */
-    private Long longLastMsgDetailId;
-    /**
      * 是否删除（0-未删除、1-已删除）
      */
     private Integer isShortDelete;

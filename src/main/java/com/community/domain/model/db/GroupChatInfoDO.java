@@ -33,7 +33,7 @@ public class GroupChatInfoDO implements Serializable {
     /**
      * 最后一次读取信息id
      */
-    private Long lastReadMsgDetailId;
+    private Long lastReadMsgId;
     /**
      * 是否删除（0-未删除、1-已删除）
      */

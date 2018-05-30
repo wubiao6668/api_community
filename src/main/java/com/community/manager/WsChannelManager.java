@@ -2,12 +2,12 @@ package com.community.manager;
 
 import com.community.common.constant.Constant;
 import com.community.common.util.JacksonUtil;
-import com.community.dao.mapper.UserMessageDetailMapper;
-import com.community.dao.mapper.UserMessageMapper;
+import com.community.dao.mapper.UserChatInfoMapper;
+import com.community.dao.mapper.UserChatMessageMapper;
 import com.community.domain.bo.websocket.WsChannelFriendBO;
 import com.community.domain.bo.websocket.WsChannelGroupBO;
-import com.community.domain.model.db.UserMessageDetailDO;
-import com.community.domain.model.db.extend.UserMessageExtendDO;
+import com.community.domain.model.db.UserChatMessageDO;
+import com.community.domain.model.db.extend.UserChatInfoExtendDO;
 import com.community.domain.response.vo.UserInfoVO;
 import com.community.domain.session.ApplicationSessionContext;
 import org.apache.commons.collections.MapUtils;
@@ -29,9 +29,9 @@ public class WsChannelManager {
     private static Logger logger = LoggerFactory.getLogger(WsChannelManager.class);
 
     @Autowired
-    private UserMessageMapper userMessageMapper;
+    private UserChatInfoMapper userChatInfoMapper;
     @Autowired
-    private UserMessageDetailMapper userMessageDetailMapper;
+    private UserChatMessageMapper userChatMessageMapper;
     @Autowired
     private UserInfoManager userInfoManager;
 
@@ -48,7 +48,7 @@ public class WsChannelManager {
             shortUserId = fromUserId;
             isFromUserLong = false;
         }
-        UserMessageExtendDO userMessageExtendDO = new UserMessageExtendDO();
+        UserChatInfoExtendDO userMessageExtendDO = new UserChatInfoExtendDO();
         userMessageExtendDO.setLongUserId(longUserId);
         userMessageExtendDO.setShortUserId(shortUserId);
         userMessageExtendDO.setLastSendTime(LocalDateTime.now());
@@ -60,10 +60,9 @@ public class WsChannelManager {
         } else {
             userMessageExtendDO.setLongUnReadMsgNumInc(1);
         }
-        int row = userMessageMapper.insertSelectiveOrUpdateIfDuplicateKey(userMessageExtendDO);
-        UserMessageDetailDO userMessageDetailDO = new UserMessageDetailDO();
-        userMessageDetailDO.setMsgId(userMessageExtendDO.getId());
-        int rowDetail = userMessageDetailMapper.insertSelective(userMessageDetailDO);
+        int row = userChatInfoMapper.insertSelectiveOrUpdateIfDuplicateKey(userMessageExtendDO);
+        UserChatMessageDO userChatMessageDO = new UserChatMessageDO();
+        int rowDetail = userChatMessageMapper.insertSelective(userChatMessageDO);
         //通知在线用户
         Map<String, WebSocketSession> webSocketSessionMap = ApplicationSessionContext.getWebSocketSessionByUserId(toUserId);
         if (MapUtils.isNotEmpty(webSocketSessionMap)) {
