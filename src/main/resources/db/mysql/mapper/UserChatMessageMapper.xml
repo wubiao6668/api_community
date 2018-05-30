@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.community.dao.mapper.UserChatMessageMapper">
+
+    <sql id="columns">
+        id,sender_user_id,receiver_user_id,type,is_read,content,send_msg_time,is_sender_delete,is_receiver_delete,is_delete,create_user_id,create_time,update_user_id,update_time,sys_version
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO user_chat_message (
+        sender_user_id,
+        receiver_user_id,
+        type,
+        is_read,
+        content,
+        send_msg_time,
+        is_sender_delete,
+        is_receiver_delete,
+        is_delete,
+        create_user_id,
+        create_time,
+        update_user_id,
+        update_time,
+        sys_version
+        ) VALUES (
+        #{senderUserId},
+        #{receiverUserId},
+        #{type},
+        #{isRead},
+        #{content},
+        #{sendMsgTime},
+        #{isSenderDelete},
+        #{isReceiverDelete},
+        0,
+        #{createUserId},
+        now(),
+        #{updateUserId},
+        now(),
+        1
+        )
+    </insert>
+
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO user_chat_message (
+        <if test="@Ognl@isNotEmpty(senderUserId)">
+            sender_user_id,
+        </if>
+        <if test="@Ognl@isNotEmpty(receiverUserId)">
+            receiver_user_id,
+        </if>
+        <if test="@Ognl@isNotEmpty(type)">
+            type,
+        </if>
+        <if test="@Ognl@isNotEmpty(isRead)">
+            is_read,
+        </if>
+        <if test="@Ognl@isNotEmpty(content)">
+            content,
+        </if>
+        <if test="@Ognl@isNotEmpty(sendMsgTime)">
+            send_msg_time,
+        </if>
+        <if test="@Ognl@isNotEmpty(isSenderDelete)">
+            is_sender_delete,
+        </if>
+        <if test="@Ognl@isNotEmpty(isReceiverDelete)">
+            is_receiver_delete,
+        </if>
+        is_delete,
+        <if test="@Ognl@isNotEmpty(createUserId)">
+            create_user_id,
+        </if>
+        create_time,
+        <if test="@Ognl@isNotEmpty(updateUserId)">
+            update_user_id,
+        </if>
+        <if test="@Ognl@isNotEmpty(updateTime)">
+            update_time,
+        </if>
+        sys_version
+        ) VALUES (
+        <if test="@Ognl@isNotEmpty(senderUserId)">
+            #{senderUserId},
+        </if>
+        <if test="@Ognl@isNotEmpty(receiverUserId)">
+            #{receiverUserId},
+        </if>
+        <if test="@Ognl@isNotEmpty(type)">
+            #{type},
+        </if>
+        <if test="@Ognl@isNotEmpty(isRead)">
+            #{isRead},
+        </if>
+        <if test="@Ognl@isNotEmpty(content)">
+            #{content},
+        </if>
+        <if test="@Ognl@isNotEmpty(sendMsgTime)">
+            #{sendMsgTime},
+        </if>
+        <if test="@Ognl@isNotEmpty(isSenderDelete)">
+            #{isSenderDelete},
+        </if>
+        <if test="@Ognl@isNotEmpty(isReceiverDelete)">
+            #{isReceiverDelete},
+        </if>
+        0,
+        <if test="@Ognl@isNotEmpty(createUserId)">
+            #{createUserId},
+        </if>
+        now(),
+        <if test="@Ognl@isNotEmpty(updateUserId)">
+            #{updateUserId},
+        </if>
+        <if test="@Ognl@isNotEmpty(updateTime)">
+            #{updateTime},
+        </if>
+        1
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE user_chat_message SET
+        sender_user_id = #{senderUserId},
+        receiver_user_id = #{receiverUserId},
+        type = #{type},
+        is_read = #{isRead},
+        content = #{content},
+        send_msg_time = #{sendMsgTime},
+        is_sender_delete = #{isSenderDelete},
+        is_receiver_delete = #{isReceiverDelete},
+        is_delete = #{isDelete},
+        create_user_id = #{createUserId},
+        create_time = #{createTime},
+        update_user_id = #{updateUserId},
+        update_time = now(),
+        sys_version = sys_version + 1
+        WHERE
+        id = #{id}
+    </update>
+
+
+    <update id="updateSelective">
+        UPDATE user_chat_message SET
+        <if test="null != senderUserId">
+            sender_user_id = #{senderUserId},
+        </if>
+        <if test="null != receiverUserId">
+            receiver_user_id = #{receiverUserId},
+        </if>
+        <if test="null != type">
+            type = #{type},
+        </if>
+        <if test="null != isRead">
+            is_read = #{isRead},
+        </if>
+        <if test="null != content">
+            content = #{content},
+        </if>
+        <if test="null != sendMsgTime">
+            send_msg_time = #{sendMsgTime},
+        </if>
+        <if test="null != isSenderDelete">
+            is_sender_delete = #{isSenderDelete},
+        </if>
+        <if test="null != isReceiverDelete">
+            is_receiver_delete = #{isReceiverDelete},
+        </if>
+        <if test="null != isDelete">
+            is_delete = #{isDelete},
+        </if>
+        <if test="null != createUserId">
+            create_user_id = #{createUserId},
+        </if>
+        <if test="null != createTime">
+            create_time = #{createTime},
+        </if>
+        <if test="null != updateUserId">
+            update_user_id = #{updateUserId},
+        </if>
+        update_time = now(),
+        sys_version = sys_version + 1
+        WHERE
+        id = #{id}
+    </update>
+
+    <update id="updateByOptimisticLock">
+        UPDATE user_chat_message
+        SET
+        <if test="null != senderUserId">
+            sender_user_id = #{senderUserId},
+        </if>
+        <if test="null != receiverUserId">
+            receiver_user_id = #{receiverUserId},
+        </if>
+        <if test="null != type">
+            type = #{type},
+        </if>
+        <if test="null != isRead">
+            is_read = #{isRead},
+        </if>
+        <if test="null != content">
+            content = #{content},
+        </if>
+        <if test="null != sendMsgTime">
+            send_msg_time = #{sendMsgTime},
+        </if>
+        <if test="null != isSenderDelete">
+            is_sender_delete = #{isSenderDelete},
+        </if>
+        <if test="null != isReceiverDelete">
+            is_receiver_delete = #{isReceiverDelete},
+        </if>
+        <if test="null != isDelete">
+            is_delete = #{isDelete},
+        </if>
+        <if test="null != createUserId">
+            create_user_id = #{createUserId},
+        </if>
+        <if test="null != createTime">
+            create_time = #{createTime},
+        </if>
+        <if test="null != updateUserId">
+            update_user_id = #{updateUserId},
+        </if>
+        update_time = now(),
+        sys_version = sys_version + 1
+        WHERE
+        sys_version = #{sysVersion, jdbcType=INTEGER}
+        AND id = #{id}
+    </update>
+
+    <delete id="delete">
+        UPDATE user_chat_message
+        SET is_delete = 1
+        <if test="@Ognl@isNotEmpty(updateAccount)">
+            update_account = #{updateAccount} ,
+        </if>
+        <if test="@Ognl@isNotEmpty(updateName)">
+            update_name = #{updateName} ,
+        </if>
+        update_time = now(),
+        sys_version = sys_version + 1
+        WHERE
+        id IN
+        <foreach collection="keys" item="keyTemp" open="(" separator="," close=")">
+            #{keyTemp}
+        </foreach>
+    </delete>
+
+    <delete id="deletePhysical">
+        DELETE
+        FROM user_chat_message
+        WHERE
+        id = #{id}
+    </delete>
+
+    <select id="getByKey" resultType="UserChatMessageDO">
+        SELECT
+        <include refid="columns"/>
+        FROM user_chat_message
+        WHERE
+        id = #{id}
+    </select>
+
+    <select id="getByKeys" resultType="UserChatMessageDO">
+        SELECT
+        <include refid="columns"/>
+        FROM user_chat_message
+        WHERE
+        id IN
+        <foreach collection="keys" item="keyTemp" open="(" separator="," close=")">
+            #{keyTemp}
+        </foreach>
+    </select>
+
+    <select id="listPage" resultType="UserChatMessageDO">
+        SELECT
+        <include refid="columns"/>
+        FROM user_chat_message
+        <include refid="listPage_where"/>
+        <trim prefix="order by" prefixOverrides=",">
+            <if test="@Ognl@isNotEmpty(sortList)">
+                <foreach collection="sortList" item="sortTemp" separator=",">
+                    ${sortTemp.fieldName} ${sortTemp.sortOrder}
+                </foreach>
+            </if>
+        </trim>
+        <if test="pagination != null">
+            limit #{pagination.startRow}, #{pagination.pageSize}
+        </if>
+    </select>
+
+    <select id="listPageLimitCount" resultType="int">
+        SELECT COUNT(1)
+        FROM
+        ( SELECT count(1)
+        FROM user_chat_message
+        <include refid="listPage_where"/>
+        <if test="pagination != null">
+            limit #{pagination.startRow}, #{pagination.limitPageSize}
+        </if>
+        ) AS tagTemp
+    </select>
+
+
+    <select id="listPageCount" resultType="int">
+        SELECT count(1)
+        FROM user_chat_message
+        <include refid="listPage_where"/>
+    </select>
+
+    <sql id="listPage_where">
+        <where>
+            <if test="id != null">
+                AND id = #{id}
+            </if>
+            <if test="senderUserId != null">
+                AND sender_user_id = #{senderUserId}
+            </if>
+            <if test="receiverUserId != null">
+                AND receiver_user_id = #{receiverUserId}
+            </if>
+            <if test="type != null">
+                AND type = #{type}
+            </if>
+            <if test="isRead != null">
+                AND is_read = #{isRead}
+            </if>
+            <if test="content != null">
+                AND content = #{content}
+            </if>
+
+            <if test="isSenderDelete != null">
+                AND is_sender_delete = #{isSenderDelete}
+            </if>
+            <if test="isReceiverDelete != null">
+                AND is_receiver_delete = #{isReceiverDelete}
+            </if>
+            <if test="isDelete != null">
+                AND is_delete = #{isDelete}
+            </if>
+            <if test="createUserId != null">
+                AND create_user_id = #{createUserId}
+            </if>
+
+            <if test="updateUserId != null">
+                AND update_user_id = #{updateUserId}
+            </if>
+
+            <if test="sysVersion != null">
+                AND sys_version = #{sysVersion}
+            </if>
+        </where>
+    </sql>
+
+</mapper>
