@@ -299,7 +299,7 @@
         </where>
     </sql>
 
-    <select id="getByUserIdBizIdAndType" resultMap="FollowInfoDO">
+    <select id="getByUserIdBizIdAndType" resultType="FollowInfoDO">
         SELECT
         <include refid="columns"/>
         FROM follow_info

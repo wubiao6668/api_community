@@ -283,7 +283,7 @@
         </where>
     </sql>
 
-    <select id="getByBizIdUserIdAndType" resultMap="LikeDO">
+    <select id="getByBizIdUserIdAndType" resultType="LikeDO">
         SELECT
         <include refid="columns"/>
         FROM like

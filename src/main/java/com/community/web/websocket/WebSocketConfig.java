@@ -1,6 +1,7 @@
 package com.community.web.websocket;
 
-import com.community.web.websocket.handler.TestHandler;
+import com.community.web.websocket.handler.WebSocketWsChannelHandler;
+import com.community.web.websocket.interceptors.HandshakeWsChannelInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
@@ -12,6 +13,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(new TestHandler(), "/ws/channel").withSockJS();
+        registry.addHandler(new WebSocketWsChannelHandler(), "/ws/channel")
+                .addInterceptors(new HandshakeWsChannelInterceptor()).withSockJS();
     }
 }

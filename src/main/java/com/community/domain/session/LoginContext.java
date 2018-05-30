@@ -1,7 +1,10 @@
 package com.community.domain.session;
 
 
+import com.google.common.collect.Maps;
 import org.apache.commons.lang.StringUtils;
+
+import java.util.Map;
 
 /**
  * 本地线程会话

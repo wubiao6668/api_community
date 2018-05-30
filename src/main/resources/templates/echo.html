@@ -63,7 +63,7 @@ limitations under the License.
 
         function connect() {
             var target = document.getElementById('target').value;
-            ws = new SockJS(target,"","564789909");
+            ws = new SockJS(target,"","server=1111&sessionId=32423423423");
             ws.onopen = function () {
                 setConnected(true);
                 log('Info: WebSocket connection opened.');
@@ -75,6 +75,19 @@ limitations under the License.
                 setConnected(false);
                 log('Info: WebSocket connection closed.');
             };
+
+            // var wsw = new SockJS(target,"",{server:1111,sessionId:32423423423});
+            // wsw.onopen = function () {
+            //     setConnected(true);
+            //     log('Info: WebSocket connection opened.');
+            // };
+            // wsw.onmessage = function (event) {
+            //     log('Received: ' + event.data);
+            // };
+            // wsw.onclose = function () {
+            //     setConnected(false);
+            //     log('Info: WebSocket connection closed.');
+            // };
         }
 
         function disconnect() {
@@ -117,7 +130,7 @@ limitations under the License.
 <div>
     <div id="connect-container">
         <div>
-            <input id="target" type="text" size="40" style="width: 350px" value="/echo"/>
+            <input id="target" type="text" size="40" style="width: 350px" value="/ws/channel"/>
         </div>
         <div>
             <button id="connect" onclick="connect();">Connect</button>
