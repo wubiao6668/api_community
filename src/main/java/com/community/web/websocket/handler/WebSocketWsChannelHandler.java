@@ -4,6 +4,7 @@ import com.community.common.constant.Constant;
 import com.community.common.util.JacksonUtil;
 import com.community.domain.bo.websocket.WsChannelBO;
 import com.community.domain.bo.websocket.WsChannelFriendBO;
+import com.community.domain.bo.websocket.WsChannelGroupBO;
 import com.community.domain.session.ApplicationSessionContext;
 import com.community.manager.WsChannelManager;
 import org.apache.commons.lang.StringUtils;
@@ -41,8 +42,11 @@ public class WebSocketWsChannelHandler extends TextWebSocketHandler {
             wsChannelManager.sendToFriend(wsChannelFriendBO);
             return;
         }
-        System.out.println(message);
         //群聊
+        if (Constant.WsChannelTypeEnum.GROUP.getCode().equals(wsChannelBO.getType())) {
+            WsChannelGroupBO wsChannelGroupBO = JacksonUtil.parseObject(wsChannelBO.getBody(), WsChannelGroupBO.class);
+            wsChannelManager.sendToGroup(wsChannelGroupBO);
+        }
     }
 
     @Override

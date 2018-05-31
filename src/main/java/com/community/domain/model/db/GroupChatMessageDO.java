@@ -4,6 +4,7 @@
 
 package com.community.domain.model.db;
 
+import com.community.domain.bo.AtInfoBO;
 import lombok.Data;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
@@ -29,7 +30,7 @@ public class GroupChatMessageDO implements Serializable {
     /**
      * @信息 json
      */
-    private String atInfo;
+    private AtInfoBO[] atInfo;
     /**
      * 消息类型（1-系统消息、2-用户）
      */

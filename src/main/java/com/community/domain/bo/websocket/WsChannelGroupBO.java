@@ -12,6 +12,9 @@ public class WsChannelGroupBO implements Serializable {
     private Long fromUserId;
     private Long toGroupId;
     private String message;
+    private Long[] atUserIds;
+    private Integer type;
+    private Integer isAnonymous;
 
     private UserInfoVO fromUser;
 

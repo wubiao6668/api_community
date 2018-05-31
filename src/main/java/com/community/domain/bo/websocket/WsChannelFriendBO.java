@@ -9,6 +9,7 @@ import java.io.Serializable;
 public class WsChannelFriendBO implements Serializable {
 
     private static final long serialVersionUID = 5569636063909935263L;
+    private Long id;
     private Long fromUserId;
     private Long toUserId;
     private String message;

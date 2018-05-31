@@ -1,6 +1,5 @@
 package com.community.domain.session;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
@@ -8,9 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.socket.WebSocketSession;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ApplicationSessionContext {
     private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationSessionContext.class);
@@ -23,9 +22,15 @@ public class ApplicationSessionContext {
             userSession = new UserSession(userId);
         }
         userSession.getSocketSessionMap().put(webSocketSession.getId(), webSocketSession);
-        userSessionMap.put(userId,userSession);
+        userSessionMap.put(userId, userSession);
     }
 
+    /**
+     * 根据userId获取用户信息
+     *
+     * @param userId
+     * @return
+     */
     public static Map<String, WebSocketSession> getWebSocketSessionByUserId(Long userId) {
         UserSession userSession = userSessionMap.get(userId);
         Map<String, WebSocketSession> webSocketSessionMap = null;
@@ -33,6 +38,20 @@ public class ApplicationSessionContext {
             webSocketSessionMap = userSession.getSocketSessionMap();
         }
         return webSocketSessionMap;
+    }
+
+    /**
+     * 根据userId获取用户信息 批量
+     *
+     * @param userIdSet
+     * @return
+     */
+    public static Set<UserSession> getUserSessionByUserIds(Set<Long> userIdSet) {
+        if (CollectionUtils.isEmpty(userIdSet)) {
+            return null;
+        }
+        Set<UserSession> userSessionSet = userIdSet.parallelStream().map(aLong -> userSessionMap.get(aLong)).collect(Collectors.toSet());
+        return userSessionSet;
     }
 
     public static boolean removeUserSessionByUserId(Long userId) {
