@@ -91,16 +91,16 @@ public class WsChannelManager {
         int rowDetail = userChatMessageMapper.insertSelective(userChatMessageDO);
         //通知在线用户
         UserSession userSession = ApplicationSessionContext.userSessionMap.get(toUserId);
-        if (null != userSession && MapUtils.isNotEmpty(userSession.getSocketSessionMap())) {
-            //查询 用户信息
-            Set<Long> idSet = Sets.newHashSet(wsChannelBO.getFromUserId(), wsChannelBO.getToUserId());
-            Map<Long, UserInfoVO> userInfoVOMap = userInfoManager.getUserByIdIfNotExistReturnDefault(idSet);
-            wsChannelBO.setFromUser(userInfoVOMap.get(wsChannelBO.getFromUserId()));
-            wsChannelBO.setToUser(userInfoVOMap.get(wsChannelBO.getToUserId()));
-            wsChannelBO.setId(wsChannelBO.getId());
-            TextMessage textMessage = new TextMessage(JacksonUtil.toJSONString(Response.success(wsChannelBO)));
-            sendMessage(userSession, textMessage);
-        }
+//        if (null != userSession && MapUtils.isNotEmpty(userSession.getSocketSessionMap())) {
+//            //查询 用户信息
+//            Set<Long> idSet = Sets.newHashSet(wsChannelBO.getFromUserId(), wsChannelBO.getToUserId());
+//            Map<Long, UserInfoVO> userInfoVOMap = userInfoManager.getUserByIdIfNotExistReturnDefault(idSet);
+//            wsChannelBO.setFromUser(userInfoVOMap.get(wsChannelBO.getFromUserId()));
+//            wsChannelBO.setToUser(userInfoVOMap.get(wsChannelBO.getToUserId()));
+//            wsChannelBO.setId(wsChannelBO.getId());
+//            TextMessage textMessage = new TextMessage(JacksonUtil.toJSONString(Response.success(wsChannelBO)));
+//            sendMessage(userSession, textMessage);
+//        }
     }
 
     /**
@@ -154,23 +154,26 @@ public class WsChannelManager {
      * @param textMessage
      */
     public void sendMessageSync(UserSession userSession, TextMessage textMessage) {
-        CompletableFuture.runAsync(() -> sendMessage(userSession, textMessage));
+//        CompletableFuture.runAsync(() -> sendMessage(userSession, textMessage));
     }
 
     /**
      * 发送信息
      *
-     * @param userSession
+     * @param webSocketSessionList
      * @param textMessage
      */
-    public void sendMessage(UserSession userSession, TextMessage textMessage) {
-        Map<String, WebSocketSession> webSocketSessionMap = userSession.getSocketSessionMap();
-        for (WebSocketSession session : webSocketSessionMap.values()) {
+    public void sendMessage(List<WebSocketSession> webSocketSessionList, TextMessage textMessage) {
+        if (CollectionUtils.isNotEmpty(webSocketSessionList)){
+            return;
+        }
+
+        for (WebSocketSession session : webSocketSessionList) {
             if (null != session) {
                 try {
                     session.sendMessage(textMessage);
                 } catch (Exception e) {
-                    webSocketSessionMap.remove(session.getId());
+//                    webSocketSessionMap.remove(session.getId());
                     logger.error("method[sendMessage]-e:{}", e);
                 }
             }

@@ -10,6 +10,6 @@ import org.springframework.web.servlet.ModelAndView;
 public class ControllerTest {
     @GetMapping
     public ModelAndView list() {
-        return new ModelAndView("echo", "messages", null);
+        return new ModelAndView("dist/index", "messages", null);
     }
 }

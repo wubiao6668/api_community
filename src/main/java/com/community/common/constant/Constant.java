@@ -7,6 +7,14 @@ public class Constant {
     public static final String USER_ID_KEY = "userId";
 
     /**
+     * 设备
+     */
+    public static final String DEVICE_TYPE = "device_type";
+    public static final Integer DEVICE_TYPE_WEB = 0;
+    public static final Integer DEVICE_TYPE_PC = 1;
+    public static final Integer DEVICE_TYPE_APP = 2;
+
+    /**
      * 默认数
      */
     public static final int DEFAULT_NUM = 6;
